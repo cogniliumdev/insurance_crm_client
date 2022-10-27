@@ -38,8 +38,12 @@ import Invoice from "./invoice/reducer";
 //Mailbox
 import Mailbox from "./mailbox/reducer";
 
+import { insuranceCRMApi } from "../api/api"
+
+
 const rootReducer = combineReducers({
     // public
+    [insuranceCRMApi.reducerPath] : insuranceCRMApi.reducer,
     Layout,
     Login,
     Account,

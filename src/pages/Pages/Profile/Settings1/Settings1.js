@@ -3,13 +3,20 @@ import { Link } from 'react-router-dom';
 import { Card, CardBody, CardHeader, Col, Container, Form, Input, Label, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
 import classnames from "classnames";
 import Flatpickr from "react-flatpickr";
+import UserContactsForm from "../../../../Components/UserContactsForm/UserContactsForm"
 
 //import images
 import progileBg from '../../../../assets/images/profile-bg.jpg';
 import avatar1 from '../../../../assets/images/users/avatar-1.jpg';
 
+// import api methods 
+import { useGetUserProfileQuery } from "../../../../api/api.js"
+
 const Settings1 = () => {
     const [activeTab, setActiveTab] = useState("1");
+
+    // const { data, error, isLoading } = useGetUserProfileQuery();
+    // console.log(userProfile);
 
     const tabChange = (tab) => {
         if (activeTab !== tab) setActiveTab(tab);
@@ -179,7 +186,7 @@ const Settings1 = () => {
                                                 }}
                                                 type="button">
                                                 <i className="far fa-envelope"></i>
-                                                Consumers
+                                                Assistant
                                             </NavLink>
                                         </NavItem>
                                     </Nav>
@@ -283,91 +290,7 @@ const Settings1 = () => {
                                         </TabPane>
 
                                         <TabPane tabId="2">
-                                            <Form>
-                                                <Row className="g-2">
-                                                    <Col lg={4}>
-                                                        <div>
-                                                            <Label htmlFor="oldpasswordInput" className="form-label">
-                                                                Phones
-                                                            </Label>
-                                                            <Input type="password" className="form-control"
-                                                                id="oldpasswordInput"
-                                                                placeholder="Enter current password" />
-                                                        </div>
-                                                    </Col>
-                                                    <Col lg={3}>
-                                                        <div className="mb-3">
-                                                            <Label htmlFor="skillsInput" className="form-label">Phones</Label>
-                                                            <select className="form-select mb-3">
-                                                                <option >Select Phone </option>
-                                                                <option value="Choices1">CSS</option>
-                                                                <option value="Choices2">HTML</option>
-                                                                <option value="Choices3">PYTHON</option>
-                                                                <option value="Choices4">JAVA</option>
-                                                                <option value="Choices5">ASP.NET</option>
-                                                            </select>
-                                                        </div>
-                                                    </Col>
-
-                                                    <Col lg={7}>
-                                                        <div>
-                                                            <Label htmlFor="newpasswordInput" className="form-label">
-                                                                Email Addresses
-                                                            </Label>
-                                                            <Input type="password" className="form-control"
-                                                                id="newpasswordInput" placeholder="Enter new password" />
-                                                        </div>
-                                                    </Col>
-
-                                                    <Col lg={7}>
-                                                        <div>
-                                                            <Label htmlFor="confirmpasswordInput" className="form-label">
-                                                                websites
-                                                            </Label>
-                                                            <Input type="password" className="form-control"
-                                                                id="confirmpasswordInput"
-                                                                placeholder="Confirm password" />
-                                                        </div>
-                                                    </Col>
-
-                                                    <Col lg={7}>
-                                                        <div>
-                                                            <Label htmlFor="confirmpasswordInput" className="form-label">
-                                                                Addresses
-                                                            </Label>
-                                                            <Input type="password" className="form-control"
-                                                                id="confirmpasswordInput"
-                                                                placeholder="Confirm password" />
-                                                        </div>
-                                                    </Col>
-
-                                                    <Col lg={7}>
-                                                        <div>
-                                                            <Label htmlFor="confirmpasswordInput" className="form-label">
-                                                                Socials
-                                                            </Label>
-                                                            <Input type="password" className="form-control"
-                                                                id="confirmpasswordInput"
-                                                                placeholder="Confirm password" />
-                                                        </div>
-                                                    </Col>
-
-                                                    <Col lg={12}>
-                                                        <div className="hstack gap-2 justify-content-end">
-                                                            <button type="button" className="btn btn-primary">
-                                                                Updates
-                                                            </button>
-                                                            <button onClick={() => tabChange("1")} type="button" className="btn btn-soft-success">
-                                                                Previous
-                                                            </button>
-                                                            <button onClick={() => tabChange("3")} type="button" className="btn btn-soft-success">
-                                                                Next
-                                                            </button>
-                                                        </div>
-                                                    </Col>
-
-                                                </Row>
-                                            </Form>
+                                            <UserContactsForm tabChange={tabChange} />
                                         </TabPane>
 
                                         <TabPane tabId="3">
@@ -424,19 +347,20 @@ const Settings1 = () => {
                                                 </div>
 
                                                 <Col lg={12}>
-                                                        <div className="hstack gap-2 justify-content-end">
-                                                            <button type="button" className="btn btn-primary">
-                                                                Updates
-                                                            </button>
-                                                            <button onClick={() => tabChange("2")} type="button" className="btn btn-soft-success">
-                                                                Previous
-                                                            </button>
-                                                            <button onClick={() => tabChange("4")} type="button" className="btn btn-soft-success">
-                                                                Next
-                                                            </button>
-                                                        </div>
-                                                    </Col>
+                                                    <div className="hstack gap-2 justify-content-end">
+                                                        <button type="button" className="btn btn-primary">
+                                                            Updates
+                                                        </button>
+                                                        <button onClick={() => tabChange("2")} type="button" className="btn btn-soft-success">
+                                                            Previous
+                                                        </button>
+                                                        <button onClick={() => tabChange("4")} type="button" className="btn btn-soft-success">
+                                                            Next
+                                                        </button>
+                                                    </div>
+                                                </Col>
                                             </form>
+
                                         </TabPane>
 
                                         <TabPane tabId="4">
@@ -445,7 +369,7 @@ const Settings1 = () => {
                                                     <Col lg={6}>
                                                         <div className="mb-3">
                                                             <Label htmlFor="firstnameInput" className="form-label">
-                                                                Last Contact
+                                                                Name
                                                             </Label>
                                                             <Input type="text" className="form-control" id="firstnameInput"
                                                                 placeholder="Enter your firstname" defaultValue="" />
@@ -454,7 +378,7 @@ const Settings1 = () => {
                                                     <Col lg={6}>
                                                         <div className="mb-3">
                                                             <Label htmlFor="lastnameInput" className="form-label">
-                                                                Tracking Data
+                                                                Email
                                                             </Label>
                                                             <Input type="text" className="form-control" id="lastnameInput"
                                                                 placeholder="Enter your lastname" defaultValue="" />
@@ -463,62 +387,12 @@ const Settings1 = () => {
                                                     <Col lg={6}>
                                                         <div className="mb-3">
                                                             <Label htmlFor="phonenumberInput" className="form-label">
-                                                                Brand
+                                                                Phone
                                                             </Label>
                                                             <Input type="text" className="form-control"
                                                                 id="phonenumberInput"
                                                                 placeholder="Enter your phone number"
                                                                 defaultValue="" />
-                                                        </div>
-                                                    </Col>
-                                                    <Col lg={6}>
-                                                        <div className="mb-3">
-                                                            <Label htmlFor="emailInput" className="form-label">
-                                                                Lead Type
-                                                            </Label>
-                                                            <Input type="email" className="form-control" id="emailInput"
-                                                                placeholder="Enter your email"
-                                                                defaultValue="" />
-                                                        </div>
-                                                    </Col>
-                                                    <Col lg={6}>
-                                                        <div className="mb-3">
-                                                            <Label htmlFor="JoiningdatInput" className="form-label">
-                                                                Referrer
-                                                            </Label>
-                                                            <Flatpickr
-                                                                className="form-control"
-                                                                options={{
-                                                                    dateFormat: "d M, Y"
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    </Col>
-                                                    <Col lg={6}>
-                                                        <div className="mb-3">
-                                                            <Label htmlFor="emailInput" className="form-label">
-                                                                Source
-                                                            </Label>
-                                                            <Input type="email" className="form-control" id="emailInput"
-                                                                placeholder="Enter your email"
-                                                                defaultValue="" />
-                                                        </div>
-                                                    </Col>
-                                                    <Col lg={6}>
-                                                        <div className="mb-3">
-                                                            <Label htmlFor="designationInput"
-                                                                className="form-label">Ip Address</Label>
-                                                            <Input type="text" className="form-control"
-                                                                id="designationInput" placeholder="Designation"
-                                                                defaultValue="" />
-                                                        </div>
-                                                    </Col>
-                                                    <Col lg={6}>
-                                                        <div className="mb-3">
-                                                            <Label htmlFor="websiteInput1"
-                                                                className="form-label">Quoter URL</Label>
-                                                            <Input type="text" className="form-control" id="websiteInput1"
-                                                                placeholder="www.example.com" defaultValue="" />
                                                         </div>
                                                     </Col>
                                                     <Col lg={12}>
