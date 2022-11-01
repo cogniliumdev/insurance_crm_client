@@ -5,18 +5,23 @@ import reportWebVitals from './reportWebVitals';
 
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
-
+import { QueryClientProvider, QueryClient } from 'react-query'; 
 import { configureStore } from "./store";
 
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
+const queryClient = new QueryClient()
 root.render(
-    <Provider store={configureStore({})}>
+
+    < Provider store={configureStore({})} >
+      <QueryClientProvider client={queryClient}>
       <React.Fragment>
         <BrowserRouter basename={process.env.PUBLIC_URL}>
           <App />
         </BrowserRouter>
       </React.Fragment>
-    </Provider>
+      </QueryClientProvider>
+    </Provider >
 );
 
 // If you want to start measuring performance in your app, pass a function

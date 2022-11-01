@@ -1,16 +1,41 @@
 import { Col, Form, Input, Label, Row, Badge } from 'reactstrap';
 import FeatherIcon from 'feather-icons-react';
 import { useState } from 'react';
+import cogoToast from 'cogo-toast';
+// import api hooks
+import { useCreatePhoneMutation, useDeletePhoneMutation } from "../../api/userProfilePhone"
 
 
-
-const UserContactsForm = ({ tabChange }) => {
+const UserContactsForm = ({ tabChange, profileData }) => {
     const [isEditPhone, setIsEditPhone] = useState(false)
     const [editPhoneValue, setEditPhoneValue] = useState("")
-    const phones = ["12312313", "456456", "7897897789", "12312313", "12312313", "12312313", "12312313", "12312313", "12312313", "12312313", "12312313", "12312313", "12312313", "12312313", "12312313", "12312313", "12312313", "12312313", "12312313"]
-    const email = ["saad@gmail.com", "saad1@gmail.com", "saad2@gmail.com", "saad3@gmail.com", "saad4@gmail.com", "saad5@gmail.com", "saad6@gmail.com", "saad7@gmail.com", "saad8@gmail.com"]
+    const [addNewPhoneVal, setAddNewPhoneVal] = useState()
+    // console.log(profileData);
+    const phonesList = profileData?.phones;
+    const emails = ["saad@gmail.com", "saad1@gmail.com", "saad2@gmail.com", "saad3@gmail.com", "saad4@gmail.com", "saad5@gmail.com", "saad6@gmail.com", "saad7@gmail.com", "saad8@gmail.com"]
+
+
+    const addNewPhone = useCreatePhoneMutation()
+    const deletePhone = useDeletePhoneMutation()
+
+    const handelAddNewPhone = (e) => {
+        e.preventDefault();
+        addNewPhone.mutate({ phone: addNewPhoneVal, id: profileData?.id });
+        if (addNewPhone.isSuccess) cogoToast.success(addNewPhone.data?.successMsg)
+        if (addNewPhone.isError) cogoToast.error("Can not add phone number")
+    }
+
+    const handelDeletePhone = (e, id) => {
+        e.preventDefault();
+        deletePhone.mutate(id)
+        if (deletePhone.isSuccess) cogoToast.success(deletePhone.data?.successMsg)
+        if (deletePhone.isError) cogoToast.error("Can not add phone number")
+    }
+
+
     return (<>
         <Form>
+
             <Row className="g-2">
                 <Col lg={9} className="mb-2">
                     <div>
@@ -22,8 +47,10 @@ const UserContactsForm = ({ tabChange }) => {
                                 (<>
                                     <Input type="text" className="form-control"
                                         id="oldpasswordInput"
-                                        placeholder="Enter Phone Number" />
-                                    <button className="btn btn-primary ms-2">
+                                        placeholder="Enter Phone Number"
+                                        onChange={(e) => setAddNewPhoneVal(e.target.value)}
+                                    />
+                                    <button onClick={(e) => handelAddNewPhone(e)} className="btn btn-primary ms-2">
                                         Add
                                     </button>
                                 </>) : (<>
@@ -48,18 +75,18 @@ const UserContactsForm = ({ tabChange }) => {
                 {/* Badges */}
                 <Col lg={12}>
                     <div className="d-flex flex-row flex-wrap gap-2">
-                        {phones.map((phone, index) => {
+                        {phonesList?.map((item, index) => {
                             return <Badge key={index} className='fs-6 d-flex justify-content-center align-items-center' color="primary">
-                                {phone}
+                                {item.phone}
                                 <i
                                     onClick={() => {
-                                        console.log(phone)
-                                        setEditPhoneValue(phone)
+                                        console.log(item.phone)
+                                        setEditPhoneValue(item.phone)
                                         setIsEditPhone(true);
                                     }}
                                     className="ri-pencil-line ps-2 pe-2"
                                 />
-                                <FeatherIcon icon="x" size={16} />
+                                <FeatherIcon onClick={(e) => handelDeletePhone(e, item.id)} icon="x" size={16} />
                             </Badge>
                         })}
                     </div>
@@ -83,7 +110,7 @@ const UserContactsForm = ({ tabChange }) => {
                 {/* Badges */}
                 <Col lg={12}>
                     <div className="d-flex flex-row flex-wrap gap-2">
-                        {email.map((phone, index) => {
+                        {emails.map((phone, index) => {
                             return <Badge key={index} className='fs-6 d-flex justify-content-center align-items-center' color="primary">
                                 {phone}
                                 <i className="ri-pencil-line ps-2 pe-2"></i>

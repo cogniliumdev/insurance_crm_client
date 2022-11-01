@@ -9,14 +9,13 @@ import UserContactsForm from "../../../../Components/UserContactsForm/UserContac
 import progileBg from '../../../../assets/images/profile-bg.jpg';
 import avatar1 from '../../../../assets/images/users/avatar-1.jpg';
 
-// import api methods 
-import { useGetUserProfileQuery } from "../../../../api/api.js"
-
+// import api hooks
+import { useGetUserProfileQuery } from "../../../../api/userProfile";
 const Settings1 = () => {
     const [activeTab, setActiveTab] = useState("1");
 
-    // const { data, error, isLoading } = useGetUserProfileQuery();
-    // console.log(userProfile);
+    const {data: profileData, isLoading} = useGetUserProfileQuery();
+    console.log(profileData);
 
     const tabChange = (tab) => {
         if (activeTab !== tab) setActiveTab(tab);
@@ -290,7 +289,7 @@ const Settings1 = () => {
                                         </TabPane>
 
                                         <TabPane tabId="2">
-                                            <UserContactsForm tabChange={tabChange} />
+                                            <UserContactsForm profileData={profileData} tabChange={tabChange} />
                                         </TabPane>
 
                                         <TabPane tabId="3">

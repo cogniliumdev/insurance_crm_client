@@ -2,20 +2,19 @@ import { createStore, applyMiddleware, compose } from "redux";
 import createSagaMiddleware from "redux-saga";
 import rootReducer from "./reducers";
 import rootSaga from "./sagas";
-import { insuranceCRMApi } from "../api/api"
+
 
 const sagaMiddleware = createSagaMiddleware();
-const middlewares = [sagaMiddleware, insuranceCRMApi.middleware];
+const middlewares = [sagaMiddleware];
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export function configureStore(initialState) {
 
   const store = createStore(
     rootReducer,
-      initialState,
-      composeEnhancers(
-          applyMiddleware(...middlewares)
-      ),
+    initialState,
+    applyMiddleware(...middlewares)
+
   );
   sagaMiddleware.run(rootSaga);
   return store;
