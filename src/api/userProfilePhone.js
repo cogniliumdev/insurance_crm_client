@@ -32,7 +32,24 @@ const useDeletePhoneMutation = () => {
     })
 }
 
+
+const updatePhone = async (obj) => {
+    const { phone, id } = obj;
+    const res = await api.patch("/phone/updatePhone", { phone: phone, phoneId: id });
+    return res.data;
+}
+
+const useUpdatePhoneMutation = () => {
+    const queryClient = useQueryClient();
+    return useMutation(updatePhone, {
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['user-profile'] })
+        }
+    })
+}
+
 export {
     useCreatePhoneMutation,
-    useDeletePhoneMutation
+    useDeletePhoneMutation,
+    useUpdatePhoneMutation
 };
