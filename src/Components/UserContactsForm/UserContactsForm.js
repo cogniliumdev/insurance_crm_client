@@ -8,27 +8,62 @@ import {
     useCreatePhoneMutation,
     useDeletePhoneMutation,
     useUpdatePhoneMutation
-} from "../../api/userProfilePhone"
+} from "../../api/userProfilePhone";
 import {
     useCreateEmailMutation,
     useDeleteEmailMutation,
     useUpdateEmailMutation
-} from "../../api/userProfileEmail"
+} from "../../api/userProfileEmail";
+import {
+    useCreateAddressMutation,
+    useDeleteAddressMutation,
+    useUpdateAddressMutation
+} from "../../api/userProfileAddress";
+import {
+    useCreateSocialsMutation,
+    useDeleteSocialsMutation,
+    useUpdateSocialsMutation
+} from "../../api/userProfileSocials";
+import {
+    useCreateWebsiteMutation,
+    useDeleteWebsiteMutation,
+    useUpdateWebsiteMutation
+} from "../../api/userProfileWebsite";
 
 
 
 const UserContactsForm = ({ tabChange, profileData }) => {
+    // phone states
     const [isEditPhone, setIsEditPhone] = useState(false);
     const [editPhoneValue, setEditPhoneValue] = useState({ phone: "", id: null });
     const [addNewPhoneVal, setAddNewPhoneVal] = useState();
 
+    // email states
     const [isEditEmail, setIsEditEmail] = useState(false);
     const [editEmailValue, setEditEmailValue] = useState({ email: "", id: null });
     const [addNewEmailVal, setAddNewEmailVal] = useState();
 
+    // address states
+    const [isEditAddress, setIsEditAddress] = useState(false);
+    const [editAddressValue, setEditAddressValue] = useState({ address: "", id: null });
+    const [addNewAddressVal, setAddNewAddressVal] = useState();
+
+    // socials states
+    const [isEditSocials, setIsEditSocials] = useState(false);
+    const [editSocialsValue, setEditSocialsValue] = useState({ socials: "", id: null });
+    const [addNewSocialsVal, setAddNewSocialsVal] = useState();
+
+    // website states
+    const [isEditWebsite, setIsEditWebsite] = useState(false);
+    const [editWebsiteValue, setEditWebsiteValue] = useState({ website: "", id: null });
+    const [addNewWebsiteVal, setAddNewWebsiteVal] = useState();
+
+
     const phonesList = profileData?.phones;
-    const emailsList = profileData?.emails
-    console.log(emailsList);
+    const emailsList = profileData?.emails;
+    const addressList = profileData?.addresses;
+    const socialsList = profileData?.socials;
+    const websiteList = profileData?.websites;
 
     // phone hooks 
     const addNewPhone = useCreatePhoneMutation();
@@ -40,12 +75,30 @@ const UserContactsForm = ({ tabChange, profileData }) => {
     const deleteEmail = useDeleteEmailMutation();
     const updateEmail = useUpdateEmailMutation();
 
+    // Address hooks 
+    const addNewAddress = useCreateAddressMutation();
+    const deleteAddress = useDeleteAddressMutation();
+    const updateAddress = useUpdateAddressMutation();
+
+    // Socials hooks 
+    const addNewSocials = useCreateSocialsMutation();
+    const deleteSocials = useDeleteSocialsMutation();
+    const updateSocials = useUpdateSocialsMutation();
+
+    // Website hooks 
+    const addNewWebsite = useCreateWebsiteMutation();
+    const deleteWebsite = useDeleteWebsiteMutation();
+    const updateWebsite = useUpdateWebsiteMutation();
+
+
+    // handlers 
+
+    // Phone Handlers
     const handelAddNewPhone = (e) => {
         e.preventDefault();
         addNewPhone.mutate({ phone: addNewPhoneVal, id: profileData?.id });
         if (addNewPhone.data) cogoToast.success(addNewPhone.data?.successMsg)
         if (addNewPhone.error) cogoToast.error("Can not add phone number")
-
     }
 
     const handelDeletePhone = async (e, id) => {
@@ -62,12 +115,12 @@ const UserContactsForm = ({ tabChange, profileData }) => {
         if (updatePhone.isError) cogoToast.error("Can not edit phone number")
     }
 
+    // Email handlers 
     const handelAddNewEmail = (e) => {
         e.preventDefault();
         addNewEmail.mutate({ email: addNewEmailVal, id: profileData?.id });
         if (addNewEmail.data) cogoToast.success(addNewEmail.data?.successMsg)
         if (addNewEmail.error) cogoToast.error("Can not add Email")
-
     }
 
     const handelDeleteEmail = async (e, id) => {
@@ -83,6 +136,74 @@ const UserContactsForm = ({ tabChange, profileData }) => {
         if (updateEmail.isSuccess) cogoToast.success(updateEmail.data?.successMsg)
         if (updateEmail.isError) cogoToast.error("Can not edit email");
     }
+
+    // Address handlers 
+    const handelAddNewAddress = (e) => {
+        e.preventDefault();
+        addNewAddress.mutate({ address: addNewAddressVal, id: profileData?.id });
+        if (addNewAddress.data) cogoToast.success(addNewAddress.data?.successMsg)
+        if (addNewAddress.error) cogoToast.error("Can not add Address")
+    }
+
+    const handelDeleteAddress = async (e, id) => {
+        e.preventDefault();
+        deleteAddress.mutate(id)
+        if (deleteAddress.isSuccess) cogoToast.success(deleteAddress.data?.successMsg)
+        if (deleteAddress.isError) cogoToast.error("Can not delete Address")
+    }
+
+    const handelUpdateAddress = (e) => {
+        e.preventDefault();
+        console.log(editAddressValue);
+        updateAddress.mutate(editAddressValue);
+        if (updateAddress.isSuccess) cogoToast.success(updateAddress.data?.successMsg)
+        if (updateAddress.isError) cogoToast.error("Can not edit Address");
+    }
+
+    // Socials handlers 
+    const handelAddNewSocials = (e) => {
+        e.preventDefault();
+        addNewSocials.mutate({ socials: addNewSocialsVal, id: profileData?.id });
+        if (addNewSocials.data) cogoToast.success(addNewSocials.data?.successMsg)
+        if (addNewSocials.error) cogoToast.error("Can not add Socials")
+    }
+
+    const handelDeleteSocials = async (e, id) => {
+        e.preventDefault();
+        deleteSocials.mutate(id)
+        if (deleteSocials.isSuccess) cogoToast.success(deleteSocials.data?.successMsg)
+        if (deleteSocials.isError) cogoToast.error("Can not delete Socials")
+    }
+
+    const handelUpdateSocials = (e) => {
+        e.preventDefault();
+        updateSocials.mutate(editSocialsValue);
+        if (updateSocials.isSuccess) cogoToast.success(updateSocials.data?.successMsg)
+        if (updateSocials.isError) cogoToast.error("Can not edit Socials");
+    }
+
+    // Website handlers 
+    const handelAddNewWebsite = (e) => {
+        e.preventDefault();
+        addNewWebsite.mutate({ website: addNewWebsiteVal, id: profileData?.id });
+        if (addNewWebsite.data) cogoToast.success(addNewWebsite.data?.successMsg)
+        if (addNewWebsite.error) cogoToast.error("Can not add Website")
+    }
+
+    const handelDeleteWebsite = async (e, id) => {
+        e.preventDefault();
+        deleteWebsite.mutate(id)
+        if (deleteWebsite.isSuccess) cogoToast.success(deleteWebsite.data?.successMsg)
+        if (deleteWebsite.isError) cogoToast.error("Can not delete Website")
+    }
+
+    const handelUpdateWebsite = (e) => {
+        e.preventDefault();
+        updateWebsite.mutate(editWebsiteValue);
+        if (updateWebsite.isSuccess) cogoToast.success(updateWebsite.data?.successMsg)
+        if (updateWebsite.isError) cogoToast.error("Can not edit Website");
+    }
+
 
     return (<>
         <Form>
@@ -212,51 +333,182 @@ const UserContactsForm = ({ tabChange, profileData }) => {
                     </div>
                 </Col>
 
-                <Col lg={7}>
+                {/* WEBSITES  */}
+                <Col lg={9} className="mb-2">
                     <div>
-                        <Label htmlFor="confirmpasswordInput" className="form-label">
+                        <Label htmlFor="oldpasswordInput" className="form-label">
                             websites
                         </Label>
                         <div className='d-flex'>
-                            <Input type="password" className="form-control"
-                                id="oldpasswordInput"
-                                placeholder="Enter website" />
-                            <button className="btn btn-primary ms-2">
-                                Add
-                            </button>
+                            {!isEditWebsite ?
+                                (<>
+                                    <Input type="text" className="form-control"
+                                        id="oldpasswordInput"
+                                        placeholder="Enter Website"
+                                        onChange={(e) => setAddNewWebsiteVal(e.target.value)}
+                                    />
+                                    <button onClick={(e) => handelAddNewWebsite(e)} className="btn btn-primary ms-2">
+                                        Add
+                                    </button>
+                                </>) : (<>
+                                    <Input type="text" className="form-control"
+                                        id="oldpasswordInput" value={editWebsiteValue.website}
+                                        placeholder="Enter Website"
+                                        // onChange={(e) => setEditedPhoneValue(e.target.value)}
+                                        onChange={(e) => setEditWebsiteValue((prevState) => ({ website: e.target.value, id: prevState.id }))}
+                                    />
+                                    <button
+                                        onClick={e => handelUpdateWebsite(e)}
+                                        className="btn btn-primary ms-2">
+                                        Update
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setIsEditWebsite(false);
+                                            setEditWebsiteValue({ website: "", id: null });
+                                        }}
+                                        className="btn btn-primary ms-2">
+                                        Cancel
+                                    </button>
+                                </>)}
                         </div>
                     </div>
                 </Col>
+                {/* Badges */}
+                <Col lg={12}>
+                    <div className="d-flex flex-row flex-wrap gap-2">
+                        {websiteList?.map((item, index) => {
+                            return <Badge key={index} className='fs-6 d-flex justify-content-center align-items-center' color="primary">
+                                {item.website}
+                                <i
+                                    onClick={() => {
+                                        setEditWebsiteValue({ website: item.website, id: item.id })
+                                        setIsEditWebsite(true);
+                                    }}
+                                    className="ri-pencil-line ps-2 pe-2"
+                                />
+                                <FeatherIcon onClick={(e) => handelDeleteWebsite(e, item.id)} icon="x" size={16} />
+                            </Badge>
+                        })}
+                    </div>
+                </Col>
 
-                <Col lg={7}>
+                {/* ADDRESS  */}
+                <Col lg={9} className="mb-2">
                     <div>
-                        <Label htmlFor="confirmpasswordInput" className="form-label">
-                            Addresses
+                        <Label htmlFor="oldpasswordInput" className="form-label">
+                            Address
                         </Label>
                         <div className='d-flex'>
-                            <Input type="password" className="form-control"
-                                id="oldpasswordInput"
-                                placeholder="Enter address" />
-                            <button className="btn btn-primary ms-2">
-                                Add
-                            </button>
+                            {!isEditAddress ?
+                                (<>
+                                    <Input type="text" className="form-control"
+                                        id="oldpasswordInput"
+                                        placeholder="Enter Address"
+                                        onChange={(e) => setAddNewAddressVal(e.target.value)}
+                                    />
+                                    <button onClick={(e) => handelAddNewAddress(e)} className="btn btn-primary ms-2">
+                                        Add
+                                    </button>
+                                </>) : (<>
+                                    <Input type="text" className="form-control"
+                                        id="oldpasswordInput" value={editAddressValue.address}
+                                        placeholder="Enter Phone Number"
+                                        // onChange={(e) => setEditedPhoneValue(e.target.value)}
+                                        onChange={(e) => setEditAddressValue((prevState) => ({ address: e.target.value, id: prevState.id }))}
+                                    />
+                                    <button
+                                        onClick={e => handelUpdateAddress(e)}
+                                        className="btn btn-primary ms-2">
+                                        Update
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setIsEditAddress(false);
+                                            setEditAddressValue({ address: "", id: null });
+                                        }}
+                                        className="btn btn-primary ms-2">
+                                        Cancel
+                                    </button>
+                                </>)}
                         </div>
                     </div>
                 </Col>
+                {/* Badges */}
+                <Col lg={12}>
+                    <div className="d-flex flex-row flex-wrap gap-2">
+                        {addressList?.map((item, index) => {
+                            return <Badge key={index} className='fs-6 d-flex justify-content-center align-items-center' color="primary">
+                                {item.address}
+                                <i
+                                    onClick={() => {
+                                        setEditAddressValue({ address: item.address, id: item.id })
+                                        setIsEditAddress(true);
+                                    }}
+                                    className="ri-pencil-line ps-2 pe-2"
+                                />
+                                <FeatherIcon onClick={(e) => handelDeleteAddress(e, item.id)} icon="x" size={16} />
+                            </Badge>
+                        })}
+                    </div>
+                </Col>
 
-                <Col lg={7}>
+                {/* SOCIALS  */}
+                <Col lg={9} className="mb-2">
                     <div>
-                        <Label htmlFor="confirmpasswordInput" className="form-label">
+                        <Label htmlFor="oldpasswordInput" className="form-label">
                             Socials
                         </Label>
                         <div className='d-flex'>
-                            <Input type="password" className="form-control"
-                                id="oldpasswordInput"
-                                placeholder="Enter social" />
-                            <button className="btn btn-primary ms-2">
-                                Add
-                            </button>
+                            {!isEditSocials ?
+                                (<>
+                                    <Input type="text" className="form-control"
+                                        id="oldpasswordInput"
+                                        placeholder="Enter Socials"
+                                        onChange={(e) => setAddNewSocialsVal(e.target.value)}
+                                    />
+                                    <button onClick={(e) => handelAddNewSocials(e)} className="btn btn-primary ms-2">
+                                        Add
+                                    </button>
+                                </>) : (<>
+                                    <Input type="text" className="form-control"
+                                        id="oldpasswordInput" value={editSocialsValue.socials}
+                                        placeholder="Enter Socials"
+                                        onChange={(e) => setEditSocialsValue((prevState) => ({ socials: e.target.value, id: prevState.id }))}
+                                    />
+                                    <button
+                                        onClick={e => handelUpdateSocials(e)}
+                                        className="btn btn-primary ms-2">
+                                        Update
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setIsEditSocials(false);
+                                            setEditSocialsValue({ socials: "", id: null });
+                                        }}
+                                        className="btn btn-primary ms-2">
+                                        Cancel
+                                    </button>
+                                </>)}
                         </div>
+                    </div>
+                </Col>
+                {/* Badges */}
+                <Col lg={12}>
+                    <div className="d-flex flex-row flex-wrap gap-2">
+                        {socialsList?.map((item, index) => {
+                            return <Badge key={index} className='fs-6 d-flex justify-content-center align-items-center' color="primary">
+                                {item.social}
+                                <i
+                                    onClick={() => {
+                                        setEditSocialsValue({ socials: item.socials, id: item.id })
+                                        setIsEditSocials(true);
+                                    }}
+                                    className="ri-pencil-line ps-2 pe-2"
+                                />
+                                <FeatherIcon onClick={(e) => handelDeleteSocials(e, item.id)} icon="x" size={16} />
+                            </Badge>
+                        })}
                     </div>
                 </Col>
 

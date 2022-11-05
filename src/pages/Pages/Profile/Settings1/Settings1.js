@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardBody, CardHeader, Col, Container, Form, Input, Label, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
 import classnames from "classnames";
@@ -10,18 +10,47 @@ import progileBg from '../../../../assets/images/profile-bg.jpg';
 import avatar1 from '../../../../assets/images/users/avatar-1.jpg';
 
 // import api hooks
-import { useGetUserProfileQuery } from "../../../../api/userProfile";
-const Settings1 = () => {
-    const [activeTab, setActiveTab] = useState("1");
+import { useGetUserProfileQuery, useUpdateUserProfileMutation } from "../../../../api/userProfile";
+import cogoToast from 'cogo-toast';
 
-    const {data: profileData, isLoading} = useGetUserProfileQuery();
+const Settings1 = () => {
+    document.title = "Profile Settings | Velzon - React Admin & Dashboard Template";
+
+    const { data: profileData, isLoading } = useGetUserProfileQuery();
+    const updateProfile = useUpdateUserProfileMutation();
     console.log(profileData);
+
+    // Profile data states 
+    const [title, setTitle] = useState();
+    const [company, setCompany] = useState();
+    const [timezone, setTimezone] = useState();
+    const [SSN, setSSN] = useState();
+    const [birthDate, setBirthDate] = useState();
+    const [TIN, setTIN] = useState();
+    const [licenseTypes, setLicenseTypes] = useState();
+    const [brokerDealer, setBrokerDealer] = useState();
+    const [relationshipManager, setRelationshipManager] = useState();
+    const [paymentPlan, setPaymentPlan] = useState();
+    const [compLevel, setCompLevel] = useState();
+    const [subdomain, setSubdomain] = useState();
+
+    const [activeTab, setActiveTab] = useState("1");
 
     const tabChange = (tab) => {
         if (activeTab !== tab) setActiveTab(tab);
     };
 
-    document.title = "Profile Settings | Velzon - React Admin & Dashboard Template";
+    const updateProfileDataObj = { title, company, timezone, SSN, birth_date: birthDate, TIN, license_types: licenseTypes, broker_dealer: brokerDealer, relationship_manager: relationshipManager, payment_plan: paymentPlan, comp_level: compLevel, subdomain }
+
+    const handelUpdateProfile = (e) => {
+        e.preventDefault();
+        updateProfile.mutate(updateProfileDataObj);
+    };
+
+    useEffect(() => {
+        if (updateProfile.isSuccess) cogoToast.success(updateProfile.data?.successMsg);
+        if (updateProfile.isError) cogoToast.error("Can not update user profile");
+    }, [updateProfile.isSuccess])
 
     return (
         <React.Fragment>
@@ -191,6 +220,7 @@ const Settings1 = () => {
                                     </Nav>
                                 </CardHeader>
                                 <CardBody className="p-4">
+
                                     <TabContent activeTab={activeTab}>
                                         <TabPane tabId="1">
                                             <Form>
@@ -201,7 +231,10 @@ const Settings1 = () => {
                                                                 Title
                                                             </Label>
                                                             <Input type="text" className="form-control" id="firstnameInput"
-                                                                placeholder="Enter your firstname" defaultValue="" />
+                                                                placeholder="Enter your firstname" defaultValue={profileData?.title}
+                                                                onChange={(e) => setTitle(e.target.value)}
+                                                            />
+
                                                         </div>
                                                     </Col>
                                                     <Col lg={6}>
@@ -210,7 +243,9 @@ const Settings1 = () => {
                                                                 Company
                                                             </Label>
                                                             <Input type="text" className="form-control" id="lastnameInput"
-                                                                placeholder="Enter your lastname" defaultValue="" />
+                                                                placeholder="Enter your lastname" defaultValue={profileData?.company}
+                                                                onChange={(e) => setCompany(e.target.value)}
+                                                            />
                                                         </div>
                                                     </Col>
                                                     <Col lg={6}>
@@ -221,7 +256,9 @@ const Settings1 = () => {
                                                             <Input type="text" className="form-control"
                                                                 id="phonenumberInput"
                                                                 placeholder="Enter your phone number"
-                                                                defaultValue="" />
+                                                                defaultValue={profileData?.timezone}
+                                                                onChange={(e) => setTimezone(e.target.value)}
+                                                            />
                                                         </div>
                                                     </Col>
                                                     <Col lg={6}>
@@ -231,7 +268,9 @@ const Settings1 = () => {
                                                             </Label>
                                                             <Input type="email" className="form-control" id="emailInput"
                                                                 placeholder="Enter your email"
-                                                                defaultValue="" />
+                                                                defaultValue={profileData?.SSN}
+                                                                onChange={(e) => setSSN(e.target.value)}
+                                                            />
                                                         </div>
                                                     </Col>
                                                     <Col lg={6}>
@@ -244,6 +283,8 @@ const Settings1 = () => {
                                                                 options={{
                                                                     dateFormat: "d M, Y"
                                                                 }}
+                                                                value={profileData?.birth_date}
+                                                                onChange={(e) => setBirthDate(e.target.value)}
                                                             />
                                                         </div>
                                                     </Col>
@@ -254,7 +295,9 @@ const Settings1 = () => {
                                                             </Label>
                                                             <Input type="email" className="form-control" id="emailInput"
                                                                 placeholder="Enter your email"
-                                                                defaultValue="" />
+                                                                defaultValue={profileData?.TIN}
+                                                                onChange={(e) => setTIN(e.target.value)}
+                                                            />
                                                         </div>
                                                     </Col>
                                                     <Col lg={6}>
@@ -263,7 +306,9 @@ const Settings1 = () => {
                                                                 className="form-label">License Types</Label>
                                                             <Input type="text" className="form-control"
                                                                 id="designationInput" placeholder="Designation"
-                                                                defaultValue="" />
+                                                                defaultValue={profileData?.license_types}
+                                                                onChange={(e) => setLicenseTypes(e.target.value)}
+                                                            />
                                                         </div>
                                                     </Col>
                                                     <Col lg={6}>
@@ -271,12 +316,14 @@ const Settings1 = () => {
                                                             <Label htmlFor="websiteInput1"
                                                                 className="form-label">Broker Dealer</Label>
                                                             <Input type="text" className="form-control" id="websiteInput1"
-                                                                placeholder="www.example.com" defaultValue="" />
+                                                                placeholder="www.example.com" defaultValue={profileData?.broker_dealer}
+                                                                onChange={(e) => setBrokerDealer(e.target.value)}
+                                                            />
                                                         </div>
                                                     </Col>
                                                     <Col lg={12}>
                                                         <div className="hstack gap-2 justify-content-end">
-                                                            <button type="button" className="btn btn-primary">
+                                                            <button onClick={(e) => handelUpdateProfile(e)} className="btn btn-primary">
                                                                 Updates
                                                             </button>
                                                             <button onClick={() => tabChange("2")} type="button" className="btn btn-soft-success">
@@ -297,21 +344,15 @@ const Settings1 = () => {
                                                 <div id="newlink">
                                                     <div id="1">
                                                         <Row>
-                                                            <Col lg={6}>
-                                                                <div className="mb-3">
-                                                                    <Label htmlFor="designationInput"
-                                                                        className="form-label">ID</Label>
-                                                                    <Input type="text" className="form-control"
-                                                                        id="designationInput" placeholder="Designation"
-                                                                        defaultValue="" />
-                                                                </div>
-                                                            </Col>
+
                                                             <Col lg={6}>
                                                                 <div className="mb-3">
                                                                     <Label htmlFor="websiteInput1"
                                                                         className="form-label">Relationship Manager</Label>
                                                                     <Input type="text" className="form-control" id="websiteInput1"
-                                                                        placeholder="www.example.com" defaultValue="" />
+                                                                        placeholder="www.example.com" defaultValue={profileData?.relationship_manager}
+                                                                        onChange={(e) => setRelationshipManager(e.target.value)}
+                                                                    />
                                                                 </div>
                                                             </Col>
                                                             <Col lg={6}>
@@ -320,7 +361,9 @@ const Settings1 = () => {
                                                                         className="form-label">Payment Plan</Label>
                                                                     <Input type="text" className="form-control"
                                                                         id="designationInput" placeholder="Designation"
-                                                                        defaultValue="" />
+                                                                        defaultValue={profileData?.payment_plan}
+                                                                        onChange={(e) => setPaymentPlan(e.target.value)}
+                                                                    />
                                                                 </div>
                                                             </Col>
                                                             <Col lg={6}>
@@ -328,7 +371,9 @@ const Settings1 = () => {
                                                                     <Label htmlFor="websiteInput1"
                                                                         className="form-label">Comp Level</Label>
                                                                     <Input type="text" className="form-control" id="websiteInput1"
-                                                                        placeholder="www.example.com" defaultValue="" />
+                                                                        placeholder="www.example.com" defaultValue={profileData?.comp_level}
+                                                                        onChange={(e) => setCompLevel(e.target.value)}
+                                                                    />
                                                                 </div>
                                                             </Col>
                                                             <Col lg={6}>
@@ -336,7 +381,9 @@ const Settings1 = () => {
                                                                     <Label htmlFor="websiteInput1"
                                                                         className="form-label">Subdomain</Label>
                                                                     <Input type="text" className="form-control" id="websiteInput1"
-                                                                        placeholder="www.example.com" defaultValue="" />
+                                                                        placeholder="www.example.com" defaultValue={profileData?.subdomain}
+                                                                        onChange={(e) => setSubdomain(e.target.value)}
+                                                                    />
                                                                 </div>
                                                             </Col>
                                                         </Row>
@@ -347,7 +394,7 @@ const Settings1 = () => {
 
                                                 <Col lg={12}>
                                                     <div className="hstack gap-2 justify-content-end">
-                                                        <button type="button" className="btn btn-primary">
+                                                        <button onClick={e => handelUpdateProfile(e)} className="btn btn-primary">
                                                             Updates
                                                         </button>
                                                         <button onClick={() => tabChange("2")} type="button" className="btn btn-soft-success">
