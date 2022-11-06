@@ -1,6 +1,6 @@
 import { Col, Form, Input, Label, Row, Badge } from 'reactstrap';
 import FeatherIcon from 'feather-icons-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import cogoToast from 'cogo-toast';
 
 // import api hooks
@@ -97,112 +97,156 @@ const UserContactsForm = ({ tabChange, profileData }) => {
     const handelAddNewPhone = (e) => {
         e.preventDefault();
         addNewPhone.mutate({ phone: addNewPhoneVal, id: profileData?.id });
-        if (addNewPhone.data) cogoToast.success(addNewPhone.data?.successMsg)
-        if (addNewPhone.error) cogoToast.error("Can not add phone number")
     }
+    useEffect(() => {
+        if (addNewPhone.isSuccess) cogoToast.success(addNewPhone.data?.successMsg)
+        if (addNewPhone.isError) cogoToast.error("Can not add phone number")
+    }, [addNewPhone.isSuccess, addNewPhone.isError]);
+
 
     const handelDeletePhone = async (e, id) => {
         e.preventDefault();
         deletePhone.mutate(id)
+    }
+    useEffect(() => {
         if (deletePhone.isSuccess) cogoToast.success(deletePhone.data?.successMsg)
         if (deletePhone.isError) cogoToast.error("Can not delete phone number")
-    }
+    }, [deletePhone.isSuccess, deletePhone.isError]);
+
 
     const handelUpdatePhone = (e) => {
         e.preventDefault();
         updatePhone.mutate(editPhoneValue)
+    }
+    useEffect(() => {
         if (updatePhone.isSuccess) cogoToast.success(updatePhone.data?.successMsg)
         if (updatePhone.isError) cogoToast.error("Can not edit phone number")
-    }
+    }, [updatePhone.isSuccess, updatePhone.isError]);
+
+
 
     // Email handlers 
     const handelAddNewEmail = (e) => {
         e.preventDefault();
         addNewEmail.mutate({ email: addNewEmailVal, id: profileData?.id });
+    }
+    useEffect(() => {
         if (addNewEmail.data) cogoToast.success(addNewEmail.data?.successMsg)
         if (addNewEmail.error) cogoToast.error("Can not add Email")
-    }
+    }, [addNewEmail.isSuccess, addNewEmail.isError]);
+
 
     const handelDeleteEmail = async (e, id) => {
         e.preventDefault();
         deleteEmail.mutate(id)
+    }
+    useEffect(() => {
         if (deleteEmail.isSuccess) cogoToast.success(deleteEmail.data?.successMsg)
         if (deleteEmail.isError) cogoToast.error("Can not delete Email")
-    }
+    }, [deleteEmail.isSuccess, deleteEmail.isError]);
+
 
     const handelUpdateEmail = (e) => {
         e.preventDefault();
         updateEmail.mutate(editEmailValue);
+    }
+    useEffect(() => {
         if (updateEmail.isSuccess) cogoToast.success(updateEmail.data?.successMsg)
         if (updateEmail.isError) cogoToast.error("Can not edit email");
-    }
+    }, [updateEmail.isSuccess, updateEmail.isError]);
+
 
     // Address handlers 
     const handelAddNewAddress = (e) => {
         e.preventDefault();
         addNewAddress.mutate({ address: addNewAddressVal, id: profileData?.id });
+    }
+    useEffect(() => {
         if (addNewAddress.data) cogoToast.success(addNewAddress.data?.successMsg)
         if (addNewAddress.error) cogoToast.error("Can not add Address")
-    }
+    }, [addNewAddress.isSuccess, addNewAddress.isError]);
+
 
     const handelDeleteAddress = async (e, id) => {
         e.preventDefault();
         deleteAddress.mutate(id)
+    }
+    useEffect(() => {
         if (deleteAddress.isSuccess) cogoToast.success(deleteAddress.data?.successMsg)
         if (deleteAddress.isError) cogoToast.error("Can not delete Address")
-    }
+    }, [deleteAddress.isSuccess, deleteAddress.isError]);
+
 
     const handelUpdateAddress = (e) => {
         e.preventDefault();
         console.log(editAddressValue);
         updateAddress.mutate(editAddressValue);
+    }
+    useEffect(() => {
         if (updateAddress.isSuccess) cogoToast.success(updateAddress.data?.successMsg)
         if (updateAddress.isError) cogoToast.error("Can not edit Address");
-    }
+    }, [updateAddress.isSuccess, updateAddress.isError]);
+
 
     // Socials handlers 
     const handelAddNewSocials = (e) => {
         e.preventDefault();
         addNewSocials.mutate({ socials: addNewSocialsVal, id: profileData?.id });
+    }
+    useEffect(() => {
         if (addNewSocials.data) cogoToast.success(addNewSocials.data?.successMsg)
         if (addNewSocials.error) cogoToast.error("Can not add Socials")
-    }
+    }, [addNewSocials.isSuccess, addNewSocials.isError]);
+
 
     const handelDeleteSocials = async (e, id) => {
         e.preventDefault();
         deleteSocials.mutate(id)
+    }
+    useEffect(() => {
         if (deleteSocials.isSuccess) cogoToast.success(deleteSocials.data?.successMsg)
         if (deleteSocials.isError) cogoToast.error("Can not delete Socials")
-    }
+    }, [deleteSocials.isSuccess, deleteSocials.isError]);
 
     const handelUpdateSocials = (e) => {
         e.preventDefault();
         updateSocials.mutate(editSocialsValue);
+    }
+    useEffect(() => {
         if (updateSocials.isSuccess) cogoToast.success(updateSocials.data?.successMsg)
         if (updateSocials.isError) cogoToast.error("Can not edit Socials");
-    }
+    }, [updateSocials.isSuccess, updateSocials.isError]);
+
 
     // Website handlers 
     const handelAddNewWebsite = (e) => {
         e.preventDefault();
         addNewWebsite.mutate({ website: addNewWebsiteVal, id: profileData?.id });
+    }
+    useEffect(() => {
         if (addNewWebsite.data) cogoToast.success(addNewWebsite.data?.successMsg)
         if (addNewWebsite.error) cogoToast.error("Can not add Website")
-    }
+    }, [addNewWebsite.isSuccess, addNewWebsite.isError]);
+
 
     const handelDeleteWebsite = async (e, id) => {
         e.preventDefault();
         deleteWebsite.mutate(id)
+    }
+    useEffect(() => {
         if (deleteWebsite.isSuccess) cogoToast.success(deleteWebsite.data?.successMsg)
         if (deleteWebsite.isError) cogoToast.error("Can not delete Website")
-    }
+    }, [deleteWebsite.isSuccess, deleteWebsite.isError]);
+
 
     const handelUpdateWebsite = (e) => {
         e.preventDefault();
         updateWebsite.mutate(editWebsiteValue);
+    }
+    useEffect(() => {
         if (updateWebsite.isSuccess) cogoToast.success(updateWebsite.data?.successMsg)
         if (updateWebsite.isError) cogoToast.error("Can not edit Website");
-    }
+    }, [updateWebsite.isSuccess, updateWebsite.isError]);
 
 
     return (<>
@@ -501,7 +545,7 @@ const UserContactsForm = ({ tabChange, profileData }) => {
                                 {item.social}
                                 <i
                                     onClick={() => {
-                                        setEditSocialsValue({ socials: item.socials, id: item.id })
+                                        setEditSocialsValue({ socials: item.social, id: item.id })
                                         setIsEditSocials(true);
                                     }}
                                     className="ri-pencil-line ps-2 pe-2"

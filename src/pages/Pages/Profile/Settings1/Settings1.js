@@ -4,6 +4,7 @@ import { Card, CardBody, CardHeader, Col, Container, Form, Input, Label, Nav, Na
 import classnames from "classnames";
 import Flatpickr from "react-flatpickr";
 import UserContactsForm from "../../../../Components/UserContactsForm/UserContactsForm"
+import cogoToast from 'cogo-toast';
 
 //import images
 import progileBg from '../../../../assets/images/profile-bg.jpg';
@@ -11,14 +12,15 @@ import avatar1 from '../../../../assets/images/users/avatar-1.jpg';
 
 // import api hooks
 import { useGetUserProfileQuery, useUpdateUserProfileMutation } from "../../../../api/userProfile";
-import cogoToast from 'cogo-toast';
+import { useGetUserAssistantQuery, useUpdateUserAssistantMutation } from "../../../../api/userAssistant";
 
 const Settings1 = () => {
     document.title = "Profile Settings | Velzon - React Admin & Dashboard Template";
 
-    const { data: profileData, isLoading } = useGetUserProfileQuery();
+    const { data: profileData } = useGetUserProfileQuery();
+    const { data: assistantData } = useGetUserAssistantQuery();
     const updateProfile = useUpdateUserProfileMutation();
-    console.log(profileData);
+    const updateAssistant = useUpdateUserAssistantMutation();
 
     // Profile data states 
     const [title, setTitle] = useState();
@@ -34,6 +36,12 @@ const Settings1 = () => {
     const [compLevel, setCompLevel] = useState();
     const [subdomain, setSubdomain] = useState();
 
+    // Assistant data states 
+    const [assistantName, setAssistantName] = useState();
+    const [assistantEmail, setAssistantEmail] = useState();
+    const [assistantPhone, setAssistantPhone] = useState();
+
+
     const [activeTab, setActiveTab] = useState("1");
 
     const tabChange = (tab) => {
@@ -41,16 +49,24 @@ const Settings1 = () => {
     };
 
     const updateProfileDataObj = { title, company, timezone, SSN, birth_date: birthDate, TIN, license_types: licenseTypes, broker_dealer: brokerDealer, relationship_manager: relationshipManager, payment_plan: paymentPlan, comp_level: compLevel, subdomain }
+    const updateAssistantDataObj = { name: assistantName, phone: assistantPhone, email: assistantEmail };
 
     const handelUpdateProfile = (e) => {
         e.preventDefault();
         updateProfile.mutate(updateProfileDataObj);
     };
 
+    const handelUpdateAssistant = (e) => {
+        e.preventDefault();
+        updateAssistant.mutate(updateAssistantDataObj);
+    };
+
     useEffect(() => {
         if (updateProfile.isSuccess) cogoToast.success(updateProfile.data?.successMsg);
         if (updateProfile.isError) cogoToast.error("Can not update user profile");
-    }, [updateProfile.isSuccess])
+        if (updateAssistant.isSuccess) cogoToast.success(updateAssistant.data?.successMsg);
+        if (updateAssistant.isError) cogoToast.error("Can not update user Assistant");
+    }, [updateProfile.isSuccess, updateAssistant.isSuccess]);
 
     return (
         <React.Fragment>
@@ -418,7 +434,9 @@ const Settings1 = () => {
                                                                 Name
                                                             </Label>
                                                             <Input type="text" className="form-control" id="firstnameInput"
-                                                                placeholder="Enter your firstname" defaultValue="" />
+                                                                placeholder="Enter your firstname" defaultValue={assistantData?.name}
+                                                                onChange={(e) => setAssistantName(e.target.value)}
+                                                            />
                                                         </div>
                                                     </Col>
                                                     <Col lg={6}>
@@ -427,7 +445,9 @@ const Settings1 = () => {
                                                                 Email
                                                             </Label>
                                                             <Input type="text" className="form-control" id="lastnameInput"
-                                                                placeholder="Enter your lastname" defaultValue="" />
+                                                                placeholder="Enter your lastname" defaultValue={assistantData?.email}
+                                                                onChange={(e) => setAssistantEmail(e.target.value)}
+                                                            />
                                                         </div>
                                                     </Col>
                                                     <Col lg={6}>
@@ -438,12 +458,14 @@ const Settings1 = () => {
                                                             <Input type="text" className="form-control"
                                                                 id="phonenumberInput"
                                                                 placeholder="Enter your phone number"
-                                                                defaultValue="" />
+                                                                defaultValue={assistantData?.phone}
+                                                                onChange={(e) => setAssistantPhone(e.target.value)}
+                                                            />
                                                         </div>
                                                     </Col>
                                                     <Col lg={12}>
                                                         <div className="hstack gap-2 justify-content-end">
-                                                            <button type="button" className="btn btn-primary">
+                                                            <button onClick={(e) => handelUpdateAssistant(e)} className="btn btn-primary">
                                                                 Updates
                                                             </button>
                                                             <button onClick={() => tabChange("3")} type="button" className="btn btn-soft-success">
