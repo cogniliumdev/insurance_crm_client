@@ -8,10 +8,15 @@ const UserProtectedRoutes = (props) => {
     const [isUser, setIsUser] = useState(false);
     const history = useHistory();
 
+    async function callme() {
+        const res = await UserService.getUserBoard();
+        console.log(res);
+    }
+    callme();
     UserService.getUserBoard().then(
         (response) => {
             setIsUser(true)
-            console.log("response")
+            console.log(response)
         },
         (error) => {
             const _content =

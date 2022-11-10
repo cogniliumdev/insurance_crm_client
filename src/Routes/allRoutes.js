@@ -158,7 +158,8 @@ import Starter from '../pages/Pages/Starter/Starter';
 import TestPage from '../pages/Pages/Starter/Starter.js';
 import SimplePage from '../pages/Pages/Profile/SimplePage/SimplePage';
 import Settings from '../pages/Pages/Profile/Settings/Settings';
-import Settings1 from '../pages/Pages/Profile/Settings1/Settings1';
+import EditProfile from '../pages/Pages/Profile/EditProfile/EditProfile';
+import CreateProfile from '../pages/Pages/Profile/CreateProfile/CreateProfile';
 import Team from '../pages/Pages/Team/Team';
 import Timeline from '../pages/Pages/Timeline/Timeline';
 import Faqs from '../pages/Pages/Faqs/Faqs';
@@ -390,7 +391,8 @@ const authProtectedRoutes = [
   { path: "/pages-test-page", component: TestPage },
   { path: "/pages-profile", component: SimplePage },
   { path: "/pages-profile-settings", component: Settings },
-  { path: "/pages-profile-Settings1", component: Settings1 },
+  { path: "/pages-profile-create-profile", component: CreateProfile },
+  { path: "/pages-profile-edit-profile", component: EditProfile },
   { path: "/pages-team", component: Team },
   { path: "/pages-timeline", component: Timeline },
   { path: "/pages-faqs", component: Faqs },

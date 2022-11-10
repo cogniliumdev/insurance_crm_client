@@ -14,7 +14,7 @@ import avatar1 from '../../../../assets/images/users/avatar-1.jpg';
 import { useGetUserProfileQuery, useUpdateUserProfileMutation } from "../../../../api/userProfile";
 import { useGetUserAssistantQuery, useUpdateUserAssistantMutation } from "../../../../api/userAssistant";
 
-const Settings1 = () => {
+const EditProfile = () => {
     document.title = "Profile Settings | Velzon - React Admin & Dashboard Template";
 
     const { data: profileData } = useGetUserProfileQuery();
@@ -41,8 +41,8 @@ const Settings1 = () => {
     const [assistantEmail, setAssistantEmail] = useState();
     const [assistantPhone, setAssistantPhone] = useState();
 
-
     const [activeTab, setActiveTab] = useState("1");
+
 
     const tabChange = (tab) => {
         if (activeTab !== tab) setActiveTab(tab);
@@ -64,9 +64,12 @@ const Settings1 = () => {
     useEffect(() => {
         if (updateProfile.isSuccess) cogoToast.success(updateProfile.data?.successMsg);
         if (updateProfile.isError) cogoToast.error("Can not update user profile");
+    }, [updateProfile.isSuccess, updateProfile.isError]);
+
+    useEffect(() => {
         if (updateAssistant.isSuccess) cogoToast.success(updateAssistant.data?.successMsg);
         if (updateAssistant.isError) cogoToast.error("Can not update user Assistant");
-    }, [updateProfile.isSuccess, updateAssistant.isSuccess]);
+    }, [updateAssistant?.isError, updateAssistant?.isSuccess]);
 
     return (
         <React.Fragment>
@@ -487,4 +490,4 @@ const Settings1 = () => {
     );
 };
 
-export default Settings1;
+export default EditProfile;

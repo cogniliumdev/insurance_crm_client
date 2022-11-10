@@ -1,9 +1,13 @@
 import api from "./apiConfig";
 import { useQuery, useMutation, useQueryClient } from "react-query";
+import authHeader from "../services/auth-header";
+import axios from "axios";
+
 
 
 const getUserProfile = async () => {
     const res = await api.get("/userProfile/getProfile");
+    // const res = await axios.get("http://localhost:8080/api/userProfile/getProfile", { headers: authHeader() });
     return res.data;
 }
 
@@ -33,7 +37,22 @@ const useUpdateUserProfileMutation = () => {
 };
 
 
+const createUserProfile = async (obj) => {
+    const res = await api.post("/userProfile/createProfile", obj);
+    return res.data;
+};
+
+const useCreateUserProfileMutation = () => {
+    const queryClient = useQueryClient();
+    return useMutation(createUserProfile, {
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['user-profile'] })
+        }
+    });
+};
+
 export {
     useGetUserProfileQuery,
-    useUpdateUserProfileMutation
+    useUpdateUserProfileMutation,
+    useCreateUserProfileMutation
 };

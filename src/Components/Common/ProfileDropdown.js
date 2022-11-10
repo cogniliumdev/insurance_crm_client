@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
-
+import AuthService from "../../services/auth.service"
 //import images
 import avatar1 from "../../assets/images/users/avatar-1.jpg";
 
@@ -29,7 +29,7 @@ const ProfileDropdown = () => {
         <React.Fragment>
             <Dropdown isOpen={isProfileDropdown} toggle={toggleProfileDropdown} className="ms-sm-3 header-item topbar-user">
                 <DropdownToggle tag="button" type="button" className="btn">
-                    <span className="d-flex align-items-center">
+                    <span className="d-flex align-items-center ">
                         <img className="rounded-circle header-profile-user" src={avatar1}
                             alt="Header Avatar" />
                         <span className="text-start ms-xl-2">
@@ -63,8 +63,15 @@ const ProfileDropdown = () => {
                     <DropdownItem href="/auth-lockscreen-basic"><i
                         className="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span className="align-middle">Lock screen</span></DropdownItem>
                     <DropdownItem href="/logout"><i
-                        className="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span
-                            className="align-middle" data-key="t-logout">Logout</span></DropdownItem>
+                        className="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>
+                        <span
+                            className="align-middle"
+                            data-key="t-logout"
+                            onClick={() => AuthService.logout()}
+                        >
+                            Logout
+                        </span>
+                    </DropdownItem>
                 </DropdownMenu>
             </Dropdown>
         </React.Fragment>
