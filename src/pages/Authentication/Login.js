@@ -29,7 +29,7 @@ import AuthService from "../../services/auth.service";
 
 const Login = (props) => {
     const history = useHistory();
-    
+
 
     const [userLogin, setUserLogin] = useState([]);
 
@@ -50,19 +50,19 @@ const Login = (props) => {
             AuthService.login(values.email, values.password).then(
                 () => {
                     history.push("/dashboard-analytics");
-                //   window.location.reload();
+                    window.location.reload();
                 },
                 (error) => {
-                  const resMessage =
-                    (error.response &&
-                      error.response.data &&
-                      error.response.data.message) ||
-                    error.message ||
-                    error.toString();
+                    const resMessage =
+                        (error.response &&
+                            error.response.data &&
+                            error.response.data.message) ||
+                        error.message ||
+                        error.toString();
                     console.log(error)
                     alert(resMessage);
                 }
-              );
+            );
         }
     });
 

@@ -17,6 +17,7 @@ import { Link, useHistory } from "react-router-dom";
 import logoLight from "../../assets/images/logo-light.png";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 import AuthService from "../../services/auth.service";
+import cogoToast from "cogo-toast";
 
 const Register = () => {
     const history = useHistory();
@@ -51,6 +52,7 @@ const Register = () => {
                     //   setMessage(response.data.message);
                     //   setSuccessful(true);
                     console.log(response)
+                    cogoToast.success(response.message)
                 },
                 (error) => {
                     const resMessage =
@@ -59,15 +61,13 @@ const Register = () => {
                             error.response.data.message) ||
                         error.message ||
                         error.toString();
-                    alert(resMessage);
+                    if (resMessage == "Request failed with status code 400") {
+                        cogoToast.error("Email is already in use!");
+                    } else {
+                        cogoToast.error(resMessage);
+                    }
                 }
             );
-            // try {
-            //     const res = await AuthService.register(values.first_name, values.email, values.password);
-            //     console.log(res)
-            // } catch (err) {
-            //     console.log(err)
-            // }
         }
     });
 

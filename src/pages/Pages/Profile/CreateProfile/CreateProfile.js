@@ -40,7 +40,6 @@ const CreateProfile = () => {
 
     const [activeTab, setActiveTab] = useState("1");
 
-
     const tabChange = (tab) => {
         if (activeTab !== tab) setActiveTab(tab);
     };
@@ -69,9 +68,18 @@ const CreateProfile = () => {
 
     const handelCreateProfile = (e) => {
         e.preventDefault();
-        createProfile.mutate(localProfileData);
+        const assistantData = { ...localProfileData, assistantEmail, assistantName, assistantPhone };
+        localStorage.setItem("userProfile", JSON.stringify(assistantData));
+        const localProfileData2 = JSON.parse(localStorage.getItem("userProfile"));
+        createProfile.mutate(localProfileData2);
     };
 
+    useEffect(() => {
+        if (createProfile.isSuccess) cogoToast.success(createProfile.data?.successMsg);
+        if (createProfile.isError) cogoToast.error("Can not create profile");
+    }, [createProfile?.isError, createProfile?.isSuccess]);
+
+    console.log(birthDate);
     return (
         <React.Fragment>
             <div className="page-content">
@@ -306,7 +314,12 @@ const CreateProfile = () => {
                                                             <Flatpickr
                                                                 className="form-control"
                                                                 options={{
-                                                                    dateFormat: "d M, Y"
+                                                                    // dateFormat: "d M, Y"
+                                                                    dateFormat: "M d, Y"
+                                                                }}
+                                                                defaultValue={birthDate}
+                                                                onChange={([date]) => {
+                                                                    setBirthDate(date.toLocaleDateString());
                                                                 }}
                                                             />
                                                         </div>

@@ -6,16 +6,19 @@ import axios from "axios";
 
 
 const getUserProfile = async () => {
+    // const user = JSON.parse(localStorage.getItem('user'));
+    // console.log(user)
     const res = await api.get("/userProfile/getProfile");
-    // const res = await axios.get("http://localhost:8080/api/userProfile/getProfile", { headers: authHeader() });
+    // const res = await axios.get("http://localhost:8080/api/userProfile/getProfile", { headers: { 'x-access-token': user.accessToken } });
+    // console.log(res)
     return res.data;
 }
 
 const useGetUserProfileQuery = () => {
     return useQuery("user-profile", getUserProfile,
         {
-            cacheTime: 30000,// 30 Seconds
-            refetchOnWindowFocus: false,
+            // cacheTime: 30000,// 30 Seconds
+            refetchOnWindowFocus: true,
         }
     );
 }

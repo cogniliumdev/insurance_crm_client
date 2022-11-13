@@ -13,6 +13,7 @@ import avatar1 from '../../../../assets/images/users/avatar-1.jpg';
 // import api hooks
 import { useGetUserProfileQuery, useUpdateUserProfileMutation } from "../../../../api/userProfile";
 import { useGetUserAssistantQuery, useUpdateUserAssistantMutation } from "../../../../api/userAssistant";
+import axios from 'axios';
 
 const EditProfile = () => {
     document.title = "Profile Settings | Velzon - React Admin & Dashboard Template";
@@ -21,6 +22,8 @@ const EditProfile = () => {
     const { data: assistantData } = useGetUserAssistantQuery();
     const updateProfile = useUpdateUserProfileMutation();
     const updateAssistant = useUpdateUserAssistantMutation();
+
+    console.log(profileData);
 
     // Profile data states 
     const [title, setTitle] = useState();
@@ -42,6 +45,11 @@ const EditProfile = () => {
     const [assistantPhone, setAssistantPhone] = useState();
 
     const [activeTab, setActiveTab] = useState("1");
+    const [reRender, setReRender] = useState(true);
+
+    useEffect(() => {
+        setReRender(!reRender);
+    }, [profileData]);
 
 
     const tabChange = (tab) => {
@@ -49,7 +57,7 @@ const EditProfile = () => {
     };
 
     const updateProfileDataObj = { title, company, timezone, SSN, birth_date: birthDate, TIN, license_types: licenseTypes, broker_dealer: brokerDealer, relationship_manager: relationshipManager, payment_plan: paymentPlan, comp_level: compLevel, subdomain }
-    const updateAssistantDataObj = { name: assistantName, phone: assistantPhone, email: assistantEmail };
+    const updateAssistantDataObj = { assistantName, assistantPhone, assistantEmail };
 
     const handelUpdateProfile = (e) => {
         e.preventDefault();
@@ -70,6 +78,20 @@ const EditProfile = () => {
         if (updateAssistant.isSuccess) cogoToast.success(updateAssistant.data?.successMsg);
         if (updateAssistant.isError) cogoToast.error("Can not update user Assistant");
     }, [updateAssistant?.isError, updateAssistant?.isSuccess]);
+
+
+    // const user = JSON.parse(localStorage.getItem('user'));
+
+
+    // const getUserProfile = async () => {
+    //     // const res = await api.get("/userProfile/getProfile");
+    //     const res = await axios.get("http://localhost:8080/api/userProfile/getProfile", { headers: { 'x-access-token': user.accessToken } });
+    //     console.log(user)
+    //     console.log(res)
+    // }
+    // getUserProfile();
+
+
 
     return (
         <React.Fragment>
@@ -92,7 +114,9 @@ const EditProfile = () => {
                             </div>
                         </div>
                     </div>
+
                     <Row>
+                        {/* <h5 className="fs-16 mb-1">XXXXXXXXXXXXXX</h5> */}
                         <Col xxl={3}>
                             <Card className="mt-n5">
                                 <CardBody className="p-4">
