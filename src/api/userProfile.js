@@ -57,5 +57,6 @@ const useCreateUserProfileMutation = () => {
 export {
     useGetUserProfileQuery,
     useUpdateUserProfileMutation,
-    useCreateUserProfileMutation
+    useCreateUserProfileMutation,
+    getUserProfile
 };

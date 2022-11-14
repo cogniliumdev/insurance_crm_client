@@ -607,9 +607,9 @@ const Navdata = () => {
                     parentId: "pages",
                     stateVariables: isProfile,
                     childItems: [
-                        { id: 1, label: "Simple Page", link: "/pages-profile", parentId: "pages" },
+                        { id: 1, label: "Simple Page", link: "/pages-simple-profile", parentId: "pages" },
                         { id: 2, label: "Settings", link: "/pages-profile-settings", parentId: "pages" },
-                        { id: 3, label: "Create Profile", link: "/pages-profile-create-profile", parentId: "pages" },
+                        { id: 3, label: "Profile", link: "/pages-profile", parentId: "pages" },
                         { id: 4, label: "Edit Profile", link: "/pages-profile-edit-profile", parentId: "pages" },
                     ]
                 },

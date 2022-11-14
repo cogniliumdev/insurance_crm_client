@@ -222,7 +222,6 @@ import Register from "../pages/Authentication/Register";
 // User Profile
 import UserProfile from "../pages/Authentication/user-profile";
 
-
 const authProtectedRoutes = [
   // { path: "/dashboard-analytics", component: DashboardAnalytics },
   // { path: "/dashboard-crm", component: DashboardCrm },
@@ -389,9 +388,9 @@ const authProtectedRoutes = [
   //Pages
   { path: "/pages-starter", component: Starter },
   { path: "/pages-test-page", component: TestPage },
-  { path: "/pages-profile", component: SimplePage },
+  { path: "/pages-simple-profile", component: SimplePage },
   { path: "/pages-profile-settings", component: Settings },
-  { path: "/pages-profile-create-profile", component: CreateProfile },
+  { path: "/pages-profile", component: CreateProfile },
   { path: "/pages-profile-edit-profile", component: EditProfile },
   { path: "/pages-team", component: Team },
   { path: "/pages-timeline", component: Timeline },
@@ -414,14 +413,14 @@ const authProtectedRoutes = [
 ];
 
 
-const Moderator = ()=>{
-  return(<h1>MODERATOR!</h1>)
+const Moderator = () => {
+  return (<h1>MODERATOR!</h1>)
 };
 
 const moderatorRoutes = [
   // Authentication Page
   { path: "/moderator", component: Moderator },
-  
+
 ]
 
 const publicRoutes = [
