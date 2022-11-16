@@ -182,8 +182,8 @@ const Navdata = () => {
                     label: "NFT",
                     link: "/dashboard-nft",
                     parentId: "dashboard",
-                    badgeName:"New",
-                    badgeColor:"danger"
+                    badgeName: "New",
+                    badgeColor: "danger"
                 },
             ],
         },
@@ -611,6 +611,7 @@ const Navdata = () => {
                         { id: 2, label: "Settings", link: "/pages-profile-settings", parentId: "pages" },
                         { id: 3, label: "Profile", link: "/pages-profile", parentId: "pages" },
                         { id: 4, label: "Edit Profile", link: "/pages-profile-edit-profile", parentId: "pages" },
+                        { id: 5, label: "Consumers", link: "/consumers", parentId: "pages" },
                     ]
                 },
                 { id: "team", label: "Team", link: "/pages-team", parentId: "pages" },

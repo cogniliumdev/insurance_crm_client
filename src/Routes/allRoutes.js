@@ -4,7 +4,7 @@ import { Redirect } from "react-router-dom";
 //Dashboard
 // import DashboardAnalytics from "../pages/DashboardAnalytics";
 // import DashboardCrm from "../pages/DashboardCrm";
-// import DashboardEcommerce from "../pages/DashboardEcommerce";
+import DashboardEcommerce from "../pages/DashboardEcommerce";
 
 // import DashboardCrypto from "../pages/DashboardCrypto";
 // import DashboardProject from "../pages/DashboardProject";
@@ -154,6 +154,8 @@ import Widgets from '../pages/Widgets/Index';
 // import CoverSignUp from "../pages/AuthenticationInner/Register/CoverSignUp";
 // import BasicPasswReset from '../pages/AuthenticationInner/PasswordReset/BasicPasswReset';
 //pages
+import Consumers from "../pages/Pages/Consumers/Consumers";
+import CreateConsumer from "../pages/Pages/Consumers/CreateConsumer";
 import Starter from '../pages/Pages/Starter/Starter';
 import TestPage from '../pages/Pages/Starter/Starter.js';
 import SimplePage from '../pages/Pages/Profile/SimplePage/SimplePage';
@@ -225,7 +227,7 @@ import UserProfile from "../pages/Authentication/user-profile";
 const authProtectedRoutes = [
   // { path: "/dashboard-analytics", component: DashboardAnalytics },
   // { path: "/dashboard-crm", component: DashboardCrm },
-  // { path: "/dashboard", component: DashboardEcommerce },
+  { path: "/dashboard", component: DashboardEcommerce },
   // { path: "/index", component: DashboardEcommerce },
   // { path: "/dashboard-crypto", component: DashboardCrypto },
   // { path: "/dashboard-projects", component: DashboardProject },
@@ -392,6 +394,8 @@ const authProtectedRoutes = [
   { path: "/pages-profile-settings", component: Settings },
   { path: "/pages-profile", component: CreateProfile },
   { path: "/pages-profile-edit-profile", component: EditProfile },
+  { path: "/consumers", component: Consumers },
+  { path: "/create-consumer", component: CreateConsumer },
   { path: "/pages-team", component: Team },
   { path: "/pages-timeline", component: Timeline },
   { path: "/pages-faqs", component: Faqs },
