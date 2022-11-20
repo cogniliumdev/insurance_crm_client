@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link , useLocation} from 'react-router-dom';
 import { Card, CardBody, CardHeader, Col, Badge, Container, Form, Input, Label, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
 import classnames from "classnames";
 import Flatpickr from "react-flatpickr";
@@ -11,7 +11,9 @@ import avatar1 from '../../../assets/images/users/avatar-1.jpg';
 import progileBg from "../../../assets/images/profile-bg.jpg";
 import cogoToast from 'cogo-toast';
 
-const CreateConsumer = () => {
+const EditConsumer = () => {
+    const {state} = useLocation();
+    console.log(state)
     const [title, setTitle] = useState();
     const [birthDate, setBirthDate] = useState();
     const [gender, setGender] = useState();
@@ -46,9 +48,7 @@ const CreateConsumer = () => {
     const [tagsVal, setTagsVal] = useState();
     const [activeTab, setActiveTab] = useState("1");
 
-    
     const createConsumer = useCreateConsumerMutation();
-
 
     const consumerObj = { title, birthDate, gender, heightWeight, tobacco, SSN, driversLicNo, driversLicState, citizenShip, countryBorn, stateBorn, martialStatus, spouse, entityType, primaryContact, contactMethod, contactTime, primaryPhone, primaryEmail, homePrimaryAddress, occupation, employer, createDate, lastContact, brand, leadType, tags, quoterURL, ipAddress, source, referrer, }
 
@@ -794,4 +794,4 @@ const CreateConsumer = () => {
     );
 };
 
-export default CreateConsumer;
+export default EditConsumer;

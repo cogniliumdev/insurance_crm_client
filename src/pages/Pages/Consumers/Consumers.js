@@ -1,12 +1,47 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap';
-import { recentOrders } from "../../../common/data";
-import { useGetAllConsumersQuery } from "../../../api/consumers"
+import { useGetAllConsumersQuery, useDeleteConsumerMutation } from "../../../api/consumers"
 import { useHistory } from 'react-router-dom';
+import cogoToast from 'cogo-toast';
 
 const Consumers = () => {
     const { data: allConsumers } = useGetAllConsumersQuery();
+    const deleteConsumer = useDeleteConsumerMutation();
     const history = useHistory();
+
+    const handelDeleteConsumer = (e, id) => {
+        e.preventDefault();
+        deleteConsumer.mutate(id)
+    };
+    useEffect(() => {
+        if (deleteConsumer.isSuccess) cogoToast.success(deleteConsumer.data?.successMsg);
+        if (deleteConsumer.isError) cogoToast.error("can not delete the consumer");
+    }, [deleteConsumer.isError, deleteConsumer.isSuccess])
+
+
+    const handelEditConsumer = (e, id) => {
+        e.preventDefault();
+        var consumerObj;
+        allConsumers.forEach((consumer) => {
+            if (consumer.id == id) consumerObj = consumer;
+        })
+        history.push({
+            pathname: '/edit-consumer',
+            state: consumerObj,
+        })
+    }
+
+    if (allConsumers?.length == 0) {
+        return <div className="page-content">
+            <div className="flex-shrink-0 text-end">
+                <button onClick={() => history.push("/create-consumer")} type="button" className="btn btn-soft-info btn-sm fs-6">
+                    <i className="ri-user-add-fill fs-5 align-middle"></i> Add New Consumers
+                </button>
+            </div>
+            <h5 className='text-center'>No Consumers</h5>
+        </div>
+    }
+
     return <>
         <div className="page-content">
             <Row>
@@ -38,9 +73,9 @@ const Consumers = () => {
                                                 <td>{consumer.primary_email}</td>
                                                 <td>
                                                     <div className='d-flex justify-content-start align-items-center'>
-                                                        <Button className='me-2' color='info' outline>View</Button>
-                                                        <Button className='me-2' color='success' outline>Edit</Button>
-                                                        <Button color='danger' outline>Delete</Button>
+                                                        <Button className='me-2 btn btn-ghost-info' outline color='info' >View</Button>
+                                                        <Button onClick={(e) => handelEditConsumer(e, consumer.id)} className='me-2 btn btn-ghost-success' outline color='success' >Edit</Button>
+                                                        <Button onClick={(e) => handelDeleteConsumer(e, consumer.id)} color='danger btn btn-ghost-danger' outline>Delete</Button>
                                                     </div>
                                                 </td>
                                             </tr>))}
