@@ -21,15 +21,15 @@ const Consumers = () => {
 
     const handelEditConsumer = (e, id) => {
         e.preventDefault();
-        var consumerObj;
-        allConsumers.forEach((consumer) => {
-            if (consumer.id == id) consumerObj = consumer;
-        })
-        history.push({
-            pathname: '/edit-consumer',
-            state: consumerObj,
-        })
+        history.push(`/edit-consumer/${id}`);
     }
+
+    const handelViewConsumer = (e, id) => {
+        e.preventDefault();
+        history.push(`/view-consumer/${id}`);
+    }
+
+
 
     if (allConsumers?.length == 0) {
         return <div className="page-content">
@@ -73,7 +73,7 @@ const Consumers = () => {
                                                 <td>{consumer.primary_email}</td>
                                                 <td>
                                                     <div className='d-flex justify-content-start align-items-center'>
-                                                        <Button className='me-2 btn btn-ghost-info' outline color='info' >View</Button>
+                                                        <Button onClick={(e) => handelViewConsumer(e, consumer.id)} className='me-2 btn btn-ghost-info' outline color='info' >View</Button>
                                                         <Button onClick={(e) => handelEditConsumer(e, consumer.id)} className='me-2 btn btn-ghost-success' outline color='success' >Edit</Button>
                                                         <Button onClick={(e) => handelDeleteConsumer(e, consumer.id)} color='danger btn btn-ghost-danger' outline>Delete</Button>
                                                     </div>

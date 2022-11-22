@@ -157,6 +157,7 @@ import Widgets from '../pages/Widgets/Index';
 import Consumers from "../pages/Pages/Consumers/Consumers";
 import CreateConsumer from "../pages/Pages/Consumers/CreateConsumer";
 import EditConsumer from "../pages/Pages/Consumers/EditConsumer";
+import ViewConsumer from "../pages/Pages/Consumers/ViewConsumer";
 import Starter from '../pages/Pages/Starter/Starter';
 import TestPage from '../pages/Pages/Starter/Starter.js';
 import SimplePage from '../pages/Pages/Profile/SimplePage/SimplePage';
@@ -397,7 +398,8 @@ const authProtectedRoutes = [
   { path: "/pages-profile-edit-profile", component: EditProfile },
   { path: "/consumers", component: Consumers },
   { path: "/create-consumer", component: CreateConsumer },
-  { path: "/edit-consumer", component: EditConsumer },
+  { path: "/edit-consumer/:consumerId", component: EditConsumer },
+  { path: "/view-consumer/:consumerId", component: ViewConsumer },
   { path: "/pages-team", component: Team },
   { path: "/pages-timeline", component: Timeline },
   { path: "/pages-faqs", component: Faqs },

@@ -5,8 +5,6 @@ import { Link } from "react-router-dom";
 
 
 const ProfileView = ({ profileData, assistantData }) => {
-    console.log(profileData);
-
     return (<>
         <Card>
             <CardBody

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Link , useLocation} from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Card, CardBody, CardHeader, Col, Badge, Container, Form, Input, Label, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
 import classnames from "classnames";
 import Flatpickr from "react-flatpickr";
 import FeatherIcon from 'feather-icons-react';
-import { useCreateConsumerMutation } from "../../../api/consumers"
+import { useUpdateConsumerMutation, useGetSingleConsumerQuery } from "../../../api/consumers"
+import { useAddConsumerTagMutation,useDeleteConsumerTagMutation } from "../../../api/consumerTags.js";
 
 //import images
 import avatar1 from '../../../assets/images/users/avatar-1.jpg';
@@ -12,8 +13,13 @@ import progileBg from "../../../assets/images/profile-bg.jpg";
 import cogoToast from 'cogo-toast';
 
 const EditConsumer = () => {
-    const {state} = useLocation();
-    console.log(state)
+
+    const { consumerId } = useParams();
+    const { data: consumerData } = useGetSingleConsumerQuery(consumerId);
+    const updateConsumer = useUpdateConsumerMutation();
+    const addConsumerTag = useAddConsumerTagMutation();
+    const deleteConsumerTag = useDeleteConsumerTagMutation();
+
     const [title, setTitle] = useState();
     const [birthDate, setBirthDate] = useState();
     const [gender, setGender] = useState();
@@ -44,13 +50,11 @@ const EditConsumer = () => {
     const [source, setSource] = useState();
     const [ipAddress, setIpAddress] = useState();
     const [quoterURL, setQuoterURL] = useState();
-    const [tags, setTags] = useState([]);
+    const [tags, setTags] = useState();
     const [tagsVal, setTagsVal] = useState();
     const [activeTab, setActiveTab] = useState("1");
 
-    const createConsumer = useCreateConsumerMutation();
-
-    const consumerObj = { title, birthDate, gender, heightWeight, tobacco, SSN, driversLicNo, driversLicState, citizenShip, countryBorn, stateBorn, martialStatus, spouse, entityType, primaryContact, contactMethod, contactTime, primaryPhone, primaryEmail, homePrimaryAddress, occupation, employer, createDate, lastContact, brand, leadType, tags, quoterURL, ipAddress, source, referrer, }
+    const consumerObj = { consumerId: consumerData?.id, title, birthDate, gender, heightWeight, tobacco, SSN, driversLicNo, driversLicState, citizenShip, countryBorn, stateBorn, martialStatus, spouse, entityType, primaryContact, contactMethod, contactTime, primaryPhone, primaryEmail, homePrimaryAddress, occupation, employer, createDate, lastContact, brand, leadType, quoterURL, ipAddress, source, referrer, }
 
     const tabChange = (tab) => {
         if (activeTab !== tab) setActiveTab(tab);
@@ -58,21 +62,22 @@ const EditConsumer = () => {
 
     const addTag = (e) => {
         e.preventDefault();
-        setTags(tags.concat(tagsVal));
+        if (!tagsVal) return
+        addConsumerTag.mutate({ consumerId: consumerData?.id, tag: tagsVal });
     }
-    const deleteTag = async (e, item) => {
+    const deleteTag = async (e, id) => {
         e.preventDefault();
-        setTags(tags.filter((val) => val !== item));
+        deleteConsumerTag.mutate(id);
     }
-    const handelCreateConsumer = (e) => {
+    const handelUpdateConsumer = (e) => {
         e.preventDefault();
-        createConsumer.mutate(consumerObj);
+        updateConsumer.mutate(consumerObj);
         console.log(consumerObj);
     };
     useEffect(() => {
-        if (createConsumer.isSuccess) cogoToast.success(createConsumer.data?.successMsg);
-        if (createConsumer.isError) cogoToast.error("Can not create profile");
-    }, [createConsumer?.isError, createConsumer?.isSuccess]);
+        if (updateConsumer.isSuccess) cogoToast.success(updateConsumer.data?.successMsg);
+        if (updateConsumer.isError) cogoToast.error("Can not create profile");
+    }, [updateConsumer?.isError, updateConsumer?.isSuccess]);
 
     document.title = "Profile Settings | Velzon - React Admin & Dashboard Template";
 
@@ -265,7 +270,7 @@ const EditConsumer = () => {
                                                                 Title
                                                             </Label>
                                                             <Input type="text" className="form-control" id="firstnameInput"
-                                                                placeholder="Enter your firstname" defaultValue={title}
+                                                                placeholder="Enter your firstname" defaultValue={consumerData?.title}
                                                                 onChange={(e) => setTitle(e.target.value)}
                                                             />
 
@@ -279,9 +284,9 @@ const EditConsumer = () => {
                                                             <Flatpickr
                                                                 className="form-control"
                                                                 options={{
-                                                                    dateFormat: "d M, Y"
+                                                                    dateFormat: "M d, Y"
                                                                 }}
-                                                                defaultValue={birthDate}
+                                                                defaultValue={consumerData?.birth_date}
                                                                 onChange={([date]) => {
 
                                                                     setBirthDate(date.toLocaleDateString())
@@ -297,10 +302,15 @@ const EditConsumer = () => {
                                                                 data-choices-search-false
                                                                 name="experienceYear"
                                                                 id="experienceYear"
+                                                                defaultValue={consumerData?.gender}
                                                                 onChange={(e) => setGender(e.target.value)}
                                                             >
-                                                                <option defaultValue="male">Male</option>
-                                                                <option value="female">Female</option>
+                                                                <option value="Male" selected={consumerData?.gender == "Male" ? 1 : 0}>
+                                                                    Male
+                                                                </option>
+                                                                <option value="Female" selected={consumerData?.gender == "Female" ? 1 : 0}>
+                                                                    Female
+                                                                </option>
                                                             </select>
                                                         </div>
                                                     </Col>
@@ -311,7 +321,7 @@ const EditConsumer = () => {
                                                             </Label>
                                                             <Input type="text" className="form-control" id="firstnameInput"
                                                                 placeholder="Enter your height weight"
-                                                                defaultValue={heightWeight}
+                                                                defaultValue={consumerData?.height_weight}
                                                                 onChange={(e) => setHeightWeight(e.target.value)}
                                                             />
                                                         </div>
@@ -324,10 +334,16 @@ const EditConsumer = () => {
                                                                 data-choices-search-false
                                                                 name="experienceYear"
                                                                 id="experienceYear"
+                                                                defaultValue={consumerData?.tobacco}
                                                                 onChange={(e) => setTobacco(e.target.value)}
                                                             >
-                                                                <option defaultValue="no">No</option>
-                                                                <option value="yes">Yes</option>
+
+                                                                <option selected={consumerData?.tobacco == "No" ? 1 : 0} value="No" >
+                                                                    No
+                                                                </option>
+                                                                <option selected={consumerData?.tobacco == "Yes" ? 1 : 0} value="Yes">
+                                                                    Yes
+                                                                </option>
                                                             </select>
                                                         </div>
                                                     </Col>
@@ -338,7 +354,7 @@ const EditConsumer = () => {
                                                             </Label>
                                                             <Input type="text" className="form-control" id="firstnameInput"
                                                                 placeholder="Enter your SSN"
-                                                                defaultValue={SSN}
+                                                                defaultValue={consumerData?.SSN}
                                                                 onChange={(e) => setSSN(e.target.value)}
                                                             />
                                                         </div>
@@ -350,7 +366,7 @@ const EditConsumer = () => {
                                                             </Label>
                                                             <Input type="text" className="form-control" id="firstnameInput"
                                                                 placeholder="Enter your driver's Lic #"
-                                                                defaultValue={driversLicNo}
+                                                                defaultValue={consumerData?.drivers_lic}
                                                                 onChange={(e) => setDriversLicNo(e.target.value)}
                                                             />
                                                         </div>
@@ -362,7 +378,7 @@ const EditConsumer = () => {
                                                             </Label>
                                                             <Input type="text" className="form-control" id="firstnameInput"
                                                                 placeholder="Enter your Driver's Lic State"
-                                                                defaultValue={driversLicState}
+                                                                defaultValue={consumerData?.drivers_lic_state}
                                                                 onChange={(e) => setDriversLicState(e.target.value)}
                                                             />
                                                         </div>
@@ -374,7 +390,7 @@ const EditConsumer = () => {
                                                             </Label>
                                                             <Input type="text" className="form-control" id="firstnameInput"
                                                                 placeholder="Enter your citizenship"
-                                                                defaultValue={citizenShip}
+                                                                defaultValue={consumerData?.citizenship}
                                                                 onChange={(e) => setCitizenShip(e.target.value)}
                                                             />
                                                         </div>
@@ -386,7 +402,7 @@ const EditConsumer = () => {
                                                             </Label>
                                                             <Input type="text" className="form-control" id="firstnameInput"
                                                                 placeholder="Enter your country born"
-                                                                defaultValue={countryBorn}
+                                                                defaultValue={consumerData?.country_born}
                                                                 onChange={(e) => setCountryBorn(e.target.value)}
                                                             />
                                                         </div>
@@ -398,7 +414,7 @@ const EditConsumer = () => {
                                                             </Label>
                                                             <Input type="text" className="form-control" id="firstnameInput"
                                                                 placeholder="Enter your country sate born"
-                                                                defaultValue={stateBorn}
+                                                                defaultValue={consumerData?.state_born}
                                                                 onChange={(e) => setStateBorn(e.target.value)}
                                                             />
                                                         </div>
@@ -411,10 +427,15 @@ const EditConsumer = () => {
                                                                 data-choices-search-false
                                                                 name="experienceYear"
                                                                 id="experienceYear"
+                                                                defaultValue={consumerData?.marital_status}
                                                                 onChange={(e) => setMartialStatus(e.target.value)}
                                                             >
-                                                                <option defaultValue="single">Single</option>
-                                                                <option value="married">Married</option>
+                                                                <option selected={consumerData?.marital_status == "Single" ? 1 : 0} value="Single">
+                                                                    Single
+                                                                </option>
+                                                                <option selected={consumerData?.marital_status == "Married" ? 1 : 0} value="Married">
+                                                                    Married
+                                                                </option>
                                                             </select>
                                                         </div>
                                                     </Col>
@@ -426,10 +447,15 @@ const EditConsumer = () => {
                                                                 data-choices-search-false
                                                                 name="experienceYear"
                                                                 id="experienceYear"
+                                                                defaultValue={consumerData?.spouse}
                                                                 onChange={(e) => setSpouse(e.target.value)}
                                                             >
-                                                                <option defaultValue="yes">Yes</option>
-                                                                <option value="no">No</option>
+                                                                <option selected={consumerData?.spouse == "Yes" ? 1 : 0} value="Yes">
+                                                                    Yes
+                                                                </option>
+                                                                <option selected={consumerData?.spouse == "No" ? 1 : 0} value="No">
+                                                                    No
+                                                                </option>
                                                             </select>
                                                         </div>
                                                     </Col>
@@ -440,7 +466,7 @@ const EditConsumer = () => {
                                                             </Label>
                                                             <Input type="text" className="form-control" id="firstnameInput"
                                                                 placeholder="Enter your entity type"
-                                                                defaultValue={entityType}
+                                                                defaultValue={consumerData?.entity_type}
                                                                 onChange={(e) => setEntityType(e.target.value)}
                                                             />
                                                         </div>
@@ -448,11 +474,8 @@ const EditConsumer = () => {
 
                                                     <Col lg={12}>
                                                         <div className="hstack gap-2 justify-content-end">
-                                                            <button type="button" className="btn btn-primary">
-                                                                Updates
-                                                            </button>
-                                                            <button type="button" className="btn btn-soft-success">
-                                                                Cancel
+                                                            <button onClick={(e) => handelUpdateConsumer(e)} type="button" className="btn btn-primary">
+                                                                Update
                                                             </button>
                                                             <button onClick={() => tabChange("2")} type="button" className="btn btn-soft-success">
                                                                 Next
@@ -473,7 +496,7 @@ const EditConsumer = () => {
                                                             </Label>
                                                             <Input type="text" className="form-control" id="firstnameInput"
                                                                 placeholder="Enter your primary contact"
-                                                                defaultValue={primaryContact}
+                                                                defaultValue={consumerData?.primary_contact}
                                                                 onChange={(e) => setPrimaryContact(e.target.value)}
                                                             />
                                                         </div>
@@ -485,7 +508,7 @@ const EditConsumer = () => {
                                                             </Label>
                                                             <Input type="text" className="form-control" id="firstnameInput"
                                                                 placeholder="Enter your contact method"
-                                                                defaultValue={contactMethod}
+                                                                defaultValue={consumerData?.contact_method}
                                                                 onChange={(e) => setContactMethod(e.target.value)}
                                                             />
                                                         </div>
@@ -497,7 +520,7 @@ const EditConsumer = () => {
                                                             </Label>
                                                             <Input type="text" className="form-control" id="firstnameInput"
                                                                 placeholder="Enter your contact time"
-                                                                defaultValue={contactTime}
+                                                                defaultValue={consumerData?.contact_time}
                                                                 onChange={(e) => setContactTime(e.target.value)}
                                                             />
                                                         </div>
@@ -509,7 +532,7 @@ const EditConsumer = () => {
                                                             </Label>
                                                             <Input type="text" className="form-control" id="firstnameInput"
                                                                 placeholder="Enter your primary phone"
-                                                                defaultValue={primaryPhone}
+                                                                defaultValue={consumerData?.primary_phone}
                                                                 onChange={(e) => setPrimaryPhone(e.target.value)}
                                                             />
                                                         </div>
@@ -521,7 +544,7 @@ const EditConsumer = () => {
                                                             </Label>
                                                             <Input type="text" className="form-control" id="firstnameInput"
                                                                 placeholder="Enter your primary email"
-                                                                defaultValue={primaryEmail}
+                                                                defaultValue={consumerData?.primary_email}
                                                                 onChange={(e) => setPrimaryEmail(e.target.value)}
                                                             />
                                                         </div>
@@ -533,18 +556,15 @@ const EditConsumer = () => {
                                                             </Label>
                                                             <Input type="text" className="form-control" id="firstnameInput"
                                                                 placeholder="Enter your home primary address"
-                                                                defaultValue={homePrimaryAddress}
+                                                                defaultValue={consumerData?.home_primary_address}
                                                                 onChange={(e) => setHomePrimaryAddress(e.target.value)}
                                                             />
                                                         </div>
                                                     </Col>
                                                     <Col lg={12}>
                                                         <div className="hstack gap-2 justify-content-end">
-                                                            <button type="button" className="btn btn-primary">
-                                                                Updates
-                                                            </button>
-                                                            <button type="button" className="btn btn-soft-success">
-                                                                Cancel
+                                                            <button onClick={(e) => handelUpdateConsumer(e)} type="button" className="btn btn-primary">
+                                                                Update
                                                             </button>
                                                             <button onClick={() => tabChange("3")} type="button" className="btn btn-soft-success">
                                                                 Next
@@ -569,7 +589,7 @@ const EditConsumer = () => {
                                                                     </Label>
                                                                     <Input type="text" className="form-control" id="firstnameInput"
                                                                         placeholder="Enter your occupation"
-                                                                        defaultValue={occupation}
+                                                                        defaultValue={consumerData?.occupation}
                                                                         onChange={(e) => setOccupation(e.target.value)}
                                                                     />
                                                                 </div>
@@ -581,18 +601,15 @@ const EditConsumer = () => {
                                                                     </Label>
                                                                     <Input type="text" className="form-control" id="firstnameInput"
                                                                         placeholder="Enter your employer"
-                                                                        defaultValue={employer}
+                                                                        defaultValue={consumerData?.employer}
                                                                         onChange={(e) => setEmployer(e.target.value)}
                                                                     />
                                                                 </div>
                                                             </Col>
                                                             <Col lg={12}>
                                                                 <div className="hstack gap-2 justify-content-end">
-                                                                    <button type="button" className="btn btn-primary">
-                                                                        Updates
-                                                                    </button>
-                                                                    <button type="button" className="btn btn-soft-success">
-                                                                        Cancel
+                                                                    <button onClick={(e) => handelUpdateConsumer(e)} type="button" className="btn btn-primary">
+                                                                        Update
                                                                     </button>
                                                                     <button onClick={() => tabChange("4")} type="button" className="btn btn-soft-success">
                                                                         Next
@@ -618,7 +635,7 @@ const EditConsumer = () => {
                                                                     </Label>
                                                                     <Input type="text" className="form-control" id="firstnameInput"
                                                                         placeholder="Enter your create date"
-                                                                        defaultValue={createDate}
+                                                                        defaultValue={consumerData?.createdAt}
                                                                         onChange={(e) => setCreateDate(e.target.value)}
                                                                     />
                                                                 </div>
@@ -630,18 +647,15 @@ const EditConsumer = () => {
                                                                     </Label>
                                                                     <Input type="text" className="form-control" id="firstnameInput"
                                                                         placeholder="Enter your employer"
-                                                                        defaultValue={lastContact}
+                                                                        defaultValue={consumerData?.last_contact}
                                                                         onChange={(e) => setLastContact(e.target.value)}
                                                                     />
                                                                 </div>
                                                             </Col>
                                                             <Col lg={12}>
                                                                 <div className="hstack gap-2 justify-content-end">
-                                                                    <button type="button" className="btn btn-primary">
-                                                                        Updates
-                                                                    </button>
-                                                                    <button type="button" className="btn btn-soft-success">
-                                                                        Cancel
+                                                                    <button onClick={(e) => handelUpdateConsumer(e)} type="button" className="btn btn-primary">
+                                                                        Update
                                                                     </button>
                                                                     <button onClick={() => tabChange("5")} type="button" className="btn btn-soft-success">
                                                                         Next
@@ -667,7 +681,7 @@ const EditConsumer = () => {
                                                                     </Label>
                                                                     <Input type="text" className="form-control" id="firstnameInput"
                                                                         placeholder="Enter your brand"
-                                                                        defaultValue={brand}
+                                                                        defaultValue={consumerData?.brand}
                                                                         onChange={(e) => setBrand(e.target.value)}
                                                                     />
                                                                 </div>
@@ -679,7 +693,7 @@ const EditConsumer = () => {
                                                                     </Label>
                                                                     <Input type="text" className="form-control" id="firstnameInput"
                                                                         placeholder="Enter your lead type"
-                                                                        defaultValue={leadType}
+                                                                        defaultValue={consumerData?.lead_type}
                                                                         onChange={(e) => setLeadType(e.target.value)}
                                                                     />
                                                                 </div>
@@ -691,7 +705,7 @@ const EditConsumer = () => {
                                                                     </Label>
                                                                     <Input type="text" className="form-control" id="firstnameInput"
                                                                         placeholder="Enter your referrer"
-                                                                        defaultValue={referrer}
+                                                                        defaultValue={consumerData?.referrer}
                                                                         onChange={(e) => setReferrer(e.target.value)}
                                                                     />
                                                                 </div>
@@ -703,7 +717,7 @@ const EditConsumer = () => {
                                                                     </Label>
                                                                     <Input type="text" className="form-control" id="firstnameInput"
                                                                         placeholder="Enter your source"
-                                                                        defaultValue={source}
+                                                                        defaultValue={consumerData?.source}
                                                                         onChange={(e) => setSource(e.target.value)}
                                                                     />
                                                                 </div>
@@ -715,7 +729,7 @@ const EditConsumer = () => {
                                                                     </Label>
                                                                     <Input type="text" className="form-control" id="firstnameInput"
                                                                         placeholder="Enter your IP address"
-                                                                        defaultValue={ipAddress}
+                                                                        defaultValue={consumerData?.ip_address}
                                                                         onChange={(e) => setIpAddress(e.target.value)}
                                                                     />
                                                                 </div>
@@ -727,7 +741,7 @@ const EditConsumer = () => {
                                                                     </Label>
                                                                     <Input type="text" className="form-control" id="firstnameInput"
                                                                         placeholder="Enter your quoter URL"
-                                                                        defaultValue={quoterURL}
+                                                                        defaultValue={consumerData?.quoter_url}
                                                                         onChange={(e) => setQuoterURL(e.target.value)}
                                                                     />
                                                                 </div>
@@ -754,11 +768,11 @@ const EditConsumer = () => {
                                                             {/* Badges */}
                                                             <Col lg={12}>
                                                                 <div className="d-flex flex-row flex-wrap gap-2">
-                                                                    {tags?.map((item, index) => {
+                                                                    {consumerData?.consumertags.map((tag, index) => {
                                                                         return <Badge key={index} className='fs-6 d-flex justify-content-center align-items-center' color="primary">
-                                                                            <span className='pe-2'>{item}</span>
+                                                                            <span className='pe-2'>{tag.tag}</span>
                                                                             <FeatherIcon
-                                                                                onClick={(e) => deleteTag(e, item)}
+                                                                                onClick={(e) => deleteTag(e, tag.id)}
                                                                                 icon="x-square"
                                                                                 size={18}
                                                                             />
@@ -769,8 +783,8 @@ const EditConsumer = () => {
 
                                                             <Col lg={12}>
                                                                 <div className="hstack gap-2 justify-content-end mt-5">
-                                                                    <button onClick={(e) => handelCreateConsumer(e)} type="button" className="btn btn-primary">
-                                                                        Create Consumer
+                                                                    <button onClick={(e) => handelUpdateConsumer(e)} type="button" className="btn btn-primary">
+                                                                        Update
                                                                     </button>
                                                                     <button onClick={() => tabChange("4")} type="button" className="btn btn-soft-success">
                                                                         previous
