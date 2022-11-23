@@ -1,4 +1,4 @@
-import { Card, CardBody, Col, List, Progress, Row, Table } from "reactstrap";
+import { Badge, Card, CardBody, Col, List, Progress, Row, Table } from "reactstrap";
 import SimpleBar from "simplebar-react";
 import FeatherIcon from 'feather-icons-react';
 import { Link, useParams } from "react-router-dom";
@@ -193,7 +193,7 @@ const ViewConsumer = () => {
                                         </tr>
                                         <tr>
                                             <th className="ps-0" scope="row">Referrer :</th>
-                                            <td className="text-muted">{consumerData?.relationship_manager}</td>
+                                            <td className="text-muted">{consumerData?.referrer}</td>
                                         </tr>
                                         <tr>
                                             <th className="ps-0" scope="row">Source :</th>
@@ -212,15 +212,25 @@ const ViewConsumer = () => {
                             </div>
                         </CardBody>
                         <CardBody>
-                            <h5 className="card-title mb-0">Tags</h5>
+                            <h5 className="card-title mb-3">Tags</h5>
                             <hr />
                             <div className="table-responsive">
                                 <Table className="table-borderless mb-0">
                                     <tbody>
                                         <tr>
-                                            <th className="ps-0" scope="row">Tags:</th>
-                                            <td className="text-muted">{consumerData?.quoter_url}</td>
+                                            <td className="text-muted d-flex flex-row flex-wrap gap-2">
+                                                {
+                                                    consumerData?.consumertags?.map((tag, index) => {
+                                                        return (
+                                                            <Badge key={index} className='px-2 fs-6' color="primary">
+                                                                {tag.tag}
+                                                            </Badge>
+                                                        )
+                                                    })
+                                                }
+                                            </td>
                                         </tr>
+
                                     </tbody>
                                 </Table>
                             </div>
@@ -234,3 +244,18 @@ const ViewConsumer = () => {
     )
 };
 export default ViewConsumer;
+
+
+{/* <span className="badge badge-outline-primary">Primary</span>
+
+<span className="badge badge-outline-secondary">Secondary</span>
+
+<span className="badge badge-outline-success">Success</span>
+
+<span className="badge badge-outline-info">Info</span>
+
+<span className="badge badge-outline-warning">Warning</span>
+
+<span className="badge badge-outline-danger">Danger</span>
+
+<span className="badge badge-outline-dark">Dark</span> */}
