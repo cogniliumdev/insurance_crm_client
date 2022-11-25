@@ -448,12 +448,7 @@ const CreateConsumer = () => {
 
                                                     <Col lg={12}>
                                                         <div className="hstack gap-2 justify-content-end">
-                                                            <button type="button" className="btn btn-primary">
-                                                                Updates
-                                                            </button>
-                                                            <button type="button" className="btn btn-soft-success">
-                                                                Cancel
-                                                            </button>
+                                                        
                                                             <button onClick={() => tabChange("2")} type="button" className="btn btn-soft-success">
                                                                 Next
                                                             </button>
@@ -540,12 +535,7 @@ const CreateConsumer = () => {
                                                     </Col>
                                                     <Col lg={12}>
                                                         <div className="hstack gap-2 justify-content-end">
-                                                            <button type="button" className="btn btn-primary">
-                                                                Updates
-                                                            </button>
-                                                            <button type="button" className="btn btn-soft-success">
-                                                                Cancel
-                                                            </button>
+                                                            
                                                             <button onClick={() => tabChange("3")} type="button" className="btn btn-soft-success">
                                                                 Next
                                                             </button>
@@ -588,12 +578,7 @@ const CreateConsumer = () => {
                                                             </Col>
                                                             <Col lg={12}>
                                                                 <div className="hstack gap-2 justify-content-end">
-                                                                    <button type="button" className="btn btn-primary">
-                                                                        Updates
-                                                                    </button>
-                                                                    <button type="button" className="btn btn-soft-success">
-                                                                        Cancel
-                                                                    </button>
+                                                                    
                                                                     <button onClick={() => tabChange("4")} type="button" className="btn btn-soft-success">
                                                                         Next
                                                                     </button>
@@ -637,12 +622,7 @@ const CreateConsumer = () => {
                                                             </Col>
                                                             <Col lg={12}>
                                                                 <div className="hstack gap-2 justify-content-end">
-                                                                    <button type="button" className="btn btn-primary">
-                                                                        Updates
-                                                                    </button>
-                                                                    <button type="button" className="btn btn-soft-success">
-                                                                        Cancel
-                                                                    </button>
+                                                                    
                                                                     <button onClick={() => tabChange("5")} type="button" className="btn btn-soft-success">
                                                                         Next
                                                                     </button>

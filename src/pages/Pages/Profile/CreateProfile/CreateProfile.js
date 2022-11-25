@@ -82,7 +82,10 @@ const CreateProfile = () => {
     };
 
     useEffect(() => {
-        if (createProfile.isSuccess) cogoToast.success(createProfile.data?.successMsg);
+        if (createProfile.isSuccess) {
+            cogoToast.success(createProfile.data?.successMsg);
+            localStorage.removeItem("userProfile");
+        }
         if (createProfile.isError) cogoToast.error("Can not create profile");
     }, [createProfile?.isError, createProfile?.isSuccess]);
 
@@ -375,7 +378,7 @@ const CreateProfile = () => {
                                                             <Col lg={12}>
                                                                 <div className="hstack gap-2 justify-content-end">
                                                                     <button onClick={(e) => handelPersonal(e)} type="button" className="btn btn-soft-success">
-                                                                        Next
+                                                                        Save and Next
                                                                     </button>
                                                                 </div>
                                                             </Col>
@@ -447,10 +450,10 @@ const CreateProfile = () => {
                                                             <div className="hstack gap-2 justify-content-end">
 
                                                                 <button onClick={(e) => handelAccount(e, "2")} type="button" className="btn btn-soft-success">
-                                                                    Previous
+                                                                    Save And Previous
                                                                 </button>
                                                                 <button onClick={(e) => handelAccount(e, "4")} type="button" className="btn btn-soft-success">
-                                                                    Next
+                                                                    Save And Next
                                                                 </button>
                                                             </div>
                                                         </Col>
@@ -507,7 +510,7 @@ const CreateProfile = () => {
                                                                         Create Profile
                                                                     </button>
                                                                     <button onClick={(e) => handelAssistant(e)} type="button" className="btn btn-soft-success">
-                                                                        Previous
+                                                                        Save and Previous
                                                                     </button>
                                                                 </div>
                                                             </Col>
