@@ -5,7 +5,8 @@ import authHeader from "../services/auth-header";
 // return axios.get(API_URL + "user", { headers: authHeader() });
 
 const api = axios.create({
-    baseURL: "http://localhost:8080/api",
+    // baseURL: "http://localhost:8080/api",
+    baseURL: "https://insurance-crm-api.vercel.app/api",
     headers: authHeader(),
 });
 
